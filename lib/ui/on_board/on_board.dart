@@ -33,7 +33,7 @@ class OnBoard extends StatelessWidget {
                       alignment: Alignment.bottomCenter,
                       child: ElevatedButton(
                           onPressed: () {
-                            debugPrint("pressed");
+                            debugPrint("Flutter is love");
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
