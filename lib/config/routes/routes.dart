@@ -1,11 +1,11 @@
-import 'package:style_on_app/exports/ui_exports.dart';
+import 'package:style_on_app/exports.dart';
 
 class Routes {
   static const onBoard = "onboard";
   static const home = "home";
-  static const login = "login";
-  static const signup = "signup";
-  static const main = "main";
+  static const signIn = "signin";
+  static const signUp = "signup";
+  static const auth = "auth";
   static const listProducts = "list_products";
   static const detailProduct = "detail_product";
   static const order = "order";
@@ -19,6 +19,12 @@ class Routes {
       switch (settings.name) {
         case home:
           return const Home();
+          case auth:
+          return const AuthScreen();
+          case signUp:
+          return const SignUp();
+          case signIn:
+          return const SignIn();
           default:
           return const OnBoard();
       }
