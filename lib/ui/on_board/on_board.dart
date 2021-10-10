@@ -34,6 +34,7 @@ class OnBoard extends StatelessWidget {
                       child: ElevatedButton(
                           onPressed: () {
                             debugPrint("pressed");
+                            debugPrint("onBoard->pressed");
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
