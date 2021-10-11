@@ -9,7 +9,7 @@ class AppStrings {
   static const enterPassword = "Enter a Password";
   static const enterConfirmPass = "Enter a Confirm Password";
   static const signInwithGoogle = "Sign In with Google";
-  static const signInWithEmail = "Sign In with Email";
+  static const signInWithEmail = "Sign Up with Email";
   static const alreadyHaveAccount = "Already have an account?";
   static const signUpDesc = "Sign up now\nget 30% cashback\non first purchase";
 }

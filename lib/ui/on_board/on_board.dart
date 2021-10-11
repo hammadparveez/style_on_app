@@ -32,9 +32,8 @@ class OnBoard extends StatelessWidget {
                       widthFactor: 1,
                       alignment: Alignment.bottomCenter,
                       child: ElevatedButton(
-                          onPressed: () {
-                            debugPrint("Flutter is love");
-                          },
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed(Routes.auth),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

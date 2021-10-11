@@ -37,7 +37,16 @@ class App extends StatelessWidget {
             fontSize: 35,
             color: Colors.white,
           ),
+          headline3: TextStyle(
+            fontSize: 25,
+            color: Colors.white,
+          ),
         ),
+        textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(Colors.white),
+          
+        )),
       ),
       navigatorKey: naigatorKey,
       onGenerateRoute: Routes.onGenerateRoute,
