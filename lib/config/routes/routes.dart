@@ -18,7 +18,7 @@ class Routes {
     return MaterialPageRoute(builder: (_) {
       switch (settings.name) {
         case home:
-          return Home();
+          return  Home();
         case auth:
           return const AuthScreen();
         case signUp:

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
 import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
 import 'package:style_on_app/utils/constants/images_paths.dart';
@@ -60,25 +61,22 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       Expanded(
-                        child: LayoutBuilder(builder: (context, c) {
-                          debugPrint("C $c");
-                          return StaggeredGridView.countBuilder(
-                            crossAxisCount: 4,
-                            staggeredTileBuilder: (i) {
-                              return StaggeredTile.count(3, 1);
-                            },
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2,
-                            itemBuilder: (_, index) {
-                              return Container(
-                                alignment: Alignment.center,
-                                color: Colors.green,
-                                child: Text("$index",
-                                    style: TextStyle(fontSize: 20)),
-                              );
-                            },
-                          );
-                        }),
+                        child: StaggeredGridView.countBuilder(
+                          itemCount: 20,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                          staggeredTileBuilder: (i) => StaggeredTile.fit(1),
+                          itemBuilder: (_, index) {
+                            return Container(
+                              alignment: Alignment.center,
+                              color: Colors.green,
+                              child: Text(
+                                  "$index ${index % 2 == 0 ? ameno(paragraphs: 1, words: 10) : ""}",
+                                  style: TextStyle(fontSize: 20)),
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),

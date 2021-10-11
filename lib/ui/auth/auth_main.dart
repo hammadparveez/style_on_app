@@ -27,7 +27,7 @@ class AuthScreen extends StatelessWidget {
                 widthFactor: 1,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.signIn);
+                    Navigator.of(context).pushNamed(Routes.home);
                   },
                   child: Text("Sign In"),
                 ),
