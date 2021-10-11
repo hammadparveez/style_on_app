@@ -7,6 +7,8 @@ final naigatorKey = GlobalKey<NavigatorState>();
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
+  final _underLineBorder =
+      const UnderlineInputBorder(borderSide: BorderSide(color: Colors.white));
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,8 +47,15 @@ class App extends StatelessWidget {
         textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(Colors.white),
-          
         )),
+        inputDecorationTheme: InputDecorationTheme(
+          
+            border: _underLineBorder,
+            enabledBorder: _underLineBorder,
+            focusedBorder: _underLineBorder,
+            hintStyle: const TextStyle(
+              color: Colors.white,
+            )),
       ),
       navigatorKey: naigatorKey,
       onGenerateRoute: Routes.onGenerateRoute,
