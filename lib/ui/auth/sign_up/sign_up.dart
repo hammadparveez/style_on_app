@@ -6,60 +6,51 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWithImage(
+      bgImgPath: ImagePaths.bg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      extendBodyBehindAppBar: true,
-      body: Container(
-        width: context.w(),
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                alignment: Alignment.centerRight,
-                colorFilter: ColorFilter.mode(Colors.black26, BlendMode.darken),
-                image: AssetImage(ImagePaths.bg),
-                fit: BoxFit.cover)),
-        child: Form(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const StyleOTitleWidget(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              child: Text(AppStrings.createAccount,
-                  style: Theme.of(context).textTheme.headline3),
-            ),
-            const CustomTextfield(
-                prefix: Icon(FontAwesomeIcons.user, color: Colors.white),
-                hintText: AppStrings.enterEmail),
-            const SizedBox(height: 10),
-            const CustomTextfield(
-                prefix: Icon(FontAwesomeIcons.key, color: Colors.white),
-                hintText: AppStrings.enterPassword),
-            const SizedBox(height: 10),
-            const CustomTextfield(
-                prefix: Icon(FontAwesomeIcons.lock, color: Colors.white),
-                hintText: AppStrings.enterConfirmPass),
-            const SizedBox(height: 20),
-            FullWidthIconButton(
-                icon: Icon(Icons.next_plan_outlined),
-                text: Text("Sign Up"),
-                onTap: () {}),
-            const SizedBox(height: 10),
-            FullWidthIconButton(
-                icon: SvgPicture.asset(ImagePaths.googleIcon, height: 25),
-                text: Text("Login With Google"),
-                onTap: () {}),
-            Center(
-              child: TextButton(
-                  onPressed: () {},
-                  child: Text("Already have an account? Login In")),
-            ),
-          ],
-        )),
-      ),
+      body: Form(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const StyleOTitleWidget(),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Text(AppStrings.createAccount,
+                style: Theme.of(context).textTheme.headline3),
+          ),
+          const CustomTextfield(
+              prefix: Icon(FontAwesomeIcons.user, color: Colors.white),
+              hintText: AppStrings.enterEmail),
+          const SizedBox(height: 10),
+          const CustomTextfield(
+              prefix: Icon(FontAwesomeIcons.key, color: Colors.white),
+              hintText: AppStrings.enterPassword),
+          const SizedBox(height: 10),
+          const CustomTextfield(
+              prefix: Icon(FontAwesomeIcons.lock, color: Colors.white),
+              hintText: AppStrings.enterConfirmPass),
+          const SizedBox(height: 20),
+          FullWidthIconButton(
+              icon: Icon(Icons.next_plan_outlined),
+              text: Text("Sign Up"),
+              onTap: () {}),
+          const SizedBox(height: 10),
+          FullWidthIconButton(
+              icon: SvgPicture.asset(ImagePaths.googleIcon, height: 25),
+              text: Text("Login With Google"),
+              onTap: () {}),
+          Center(
+            child: TextButton(
+                onPressed: () {},
+                child: Text("Already have an account? Login In")),
+          ),
+        ],
+      )),
     );
   }
 }

@@ -9,3 +9,4 @@ export "package:style_on_app/ui/auth/sign_up/sign_up.dart";
 export "package:style_on_app/ui/auth/sign_in/sign_in.dart";
 export "package:style_on_app/ui/base_widgets/fullwidth_icon_btn.dart";
 export "package:style_on_app/ui/base_widgets/style_otitle_widget.dart";
+export "package:style_on_app/ui/base_widgets/scaffold_with_image.dart";
