@@ -8,21 +8,8 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldWithImage(
       bgImgPath: ImagePaths.authMainImg,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          TextButton(
-              style: const ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-              onPressed: () {},
-              child: Row(
-                children: const [
-                  Text("Skip"),
-                  Icon(Icons.arrow_forward_ios_rounded),
-                ],
-              ))
-        ],
+      appBar: AuthAppBarWidget(
+        onSkipPress: () {},
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -37,7 +24,9 @@ class AuthScreen extends StatelessWidget {
               FractionallySizedBox(
                 widthFactor: 1,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Routes.signIn);
+                  },
                   child: Text("Sign In"),
                 ),
               ),

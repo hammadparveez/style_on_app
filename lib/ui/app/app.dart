@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:style_on_app/exports.dart';
 import "package:style_on_app/exports/ui_exports.dart";
 
@@ -43,13 +45,16 @@ class App extends StatelessWidget {
             fontSize: 25,
             color: Colors.white,
           ),
+          bodyText1:
+              TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
         textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
+          textStyle:
+              MaterialStateProperty.all(TextStyle(fontWeight: FontWeight.w400)),
           foregroundColor: MaterialStateProperty.all(Colors.white),
         )),
         inputDecorationTheme: InputDecorationTheme(
-          
             border: _underLineBorder,
             enabledBorder: _underLineBorder,
             focusedBorder: _underLineBorder,

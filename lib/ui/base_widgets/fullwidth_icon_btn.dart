@@ -1,11 +1,11 @@
 import 'package:style_on_app/exports.dart';
 
 class FullWidthIconButton extends StatelessWidget {
-  final Widget icon;
+  final Widget? icon;
   final Widget text;
   final VoidCallback onTap;
   const FullWidthIconButton(
-      {Key? key, required this.icon, required this.text, required this.onTap})
+      {Key? key, this.icon, required this.text, required this.onTap})
       : super(key: key);
 
   @override
@@ -17,8 +17,8 @@ class FullWidthIconButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            icon,
-            const SizedBox(width: 10),
+            icon ?? const SizedBox(),
+            icon != null ? const SizedBox(width: 10) : const SizedBox(),
             text,
           ],
         ),
