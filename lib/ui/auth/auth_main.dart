@@ -9,7 +9,9 @@ class AuthScreen extends StatelessWidget {
     return ScaffoldWithImage(
       bgImgPath: ImagePaths.authMainImg,
       appBar: AuthAppBarWidget(
-        onSkipPress: () {},
+        onSkipPress: () {
+          naigatorKey.currentState?.pushNamed(Routes.home);
+        },
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

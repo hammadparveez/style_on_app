@@ -1,4 +1,9 @@
 class AppStrings {
+  static const home = "Home";
+  static const notifications = "Notifications";
+  static const favorite= "Favorite";
+  static const settings = "Settings";
+  static const profile= "Profile";
   static const letsExplore = "Let's Explore";
   static const letsExplorDesc = "Explore the new\nworld of clothing";
   static const style = "Style";
@@ -10,8 +15,8 @@ class AppStrings {
   static const enterConfirmPass = "Enter a Confirm Password";
   static const signInwithGoogle = "Sign In with Google";
   static const signInWithEmail = "Sign Up with Email";
-  static const forgetPassword= "Forget Password?";
-  static const rememberMe= "Remember me";
+  static const forgetPassword = "Forget Password?";
+  static const rememberMe = "Remember me";
   static const alreadyHaveAccount = "Already have an account?";
   static const dontHaveAccount = "Don't have an account? Create Account";
   static const signUpDesc = "Sign up now\nget 30% cashback\non first purchase";

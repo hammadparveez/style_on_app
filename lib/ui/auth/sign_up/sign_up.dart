@@ -10,7 +10,9 @@ class SignUp extends StatelessWidget {
     return ScaffoldWithImage(
       bgImgPath: ImagePaths.bg,
       appBar: AuthAppBarWidget(
-        onSkipPress: () {},
+        onSkipPress: () {
+          Navigator.of(context).pushReplacementNamed(Routes.home);
+        },
       ),
       body: SingleChildScrollView(
         child: SizedBox(

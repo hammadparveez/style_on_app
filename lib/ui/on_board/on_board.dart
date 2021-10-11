@@ -1,4 +1,4 @@
-import 'package:line_icons/line_icon.dart';
+
 import 'package:style_on_app/exports.dart';
 
 class OnBoard extends StatelessWidget {

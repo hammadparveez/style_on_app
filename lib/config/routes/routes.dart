@@ -18,14 +18,14 @@ class Routes {
     return MaterialPageRoute(builder: (_) {
       switch (settings.name) {
         case home:
-          return const Home();
-          case auth:
+          return Home();
+        case auth:
           return const AuthScreen();
-          case signUp:
+        case signUp:
           return const SignUp();
-          case signIn:
+        case signIn:
           return const SignIn();
-          default:
+        default:
           return const OnBoard();
       }
     });
