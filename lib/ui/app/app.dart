@@ -17,7 +17,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'StyleO',
       theme: ThemeData(
-        fontFamily: 'Raleway',
+        fontFamily: 'Roboto',
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -50,7 +50,8 @@ class App extends StatelessWidget {
           subtitle2: TextStyle(
             height: 1.2,
             overflow: TextOverflow.ellipsis,
-            fontSize: 12,
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
           ),
         ),
         textButtonTheme: TextButtonThemeData(

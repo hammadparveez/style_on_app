@@ -8,6 +8,13 @@ class ImagePaths {
   static const p4 = "assets/images/4.jpg";
   static const p5 = "assets/images/5.jpg";
   static const p6 = "assets/images/6.jpg";
+  static const d1 = "assets/images/p1.jpg";
+  static const d2 = "assets/images/6.jpg";
+  static const d3 = "assets/images/d2.jpg";
+  static const d4 = "assets/images/d3.jpg";
+  static const d5 = "assets/images/d4.jpg";
+  static const d6 = "assets/images/d5.jpg";
+  static const color = "assets/images/color.jpg";
   static const earphone = "assets/images/earphone.webp";
 
   static const mainSlide1 = "assets/images/slipper_slider.jpg";
