@@ -47,6 +47,11 @@ class App extends StatelessWidget {
           ),
           bodyText1:
               TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+          subtitle2: TextStyle(
+            height: 1.2,
+            overflow: TextOverflow.ellipsis,
+            fontSize: 12,
+          ),
         ),
         textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(

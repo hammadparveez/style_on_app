@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
 import 'package:style_on_app/exports.dart';
+import 'package:style_on_app/exports/ui_exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
 import 'package:style_on_app/utils/constants/images_paths.dart';
 
@@ -27,11 +29,28 @@ class _HomeState extends State<Home> {
         title: const Text(AppStrings.profile)),
   ];
 
+  final products = [
+    ProductContainer(imgPath: ImagePaths.authMainImg),
+    ProductContainer(imgPath: ImagePaths.bg),
+    ProductContainer(imgPath: ImagePaths.onBoardImg),
+    ProductContainer(imgPath: ImagePaths.p1),
+    ProductContainer(imgPath: ImagePaths.p2),
+    ProductContainer(imgPath: ImagePaths.p3),
+    ProductContainer(imgPath: ImagePaths.p4),
+    ProductContainer(imgPath: ImagePaths.p5),
+    ProductContainer(imgPath: ImagePaths.p6),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final heightExcludeAppbar = context.h() - kToolbarHeight;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          )),
       body: SingleChildScrollView(
         child: SizedBox(
           height: heightExcludeAppbar,
@@ -61,21 +80,19 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       Expanded(
-                        child: StaggeredGridView.countBuilder(
-                          itemCount: 20,
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
-                          staggeredTileBuilder: (i) => StaggeredTile.fit(1),
-                          itemBuilder: (_, index) {
-                            return Container(
-                              alignment: Alignment.center,
-                              color: Colors.green,
-                              child: Text(
-                                  "$index ${index % 2 == 0 ? ameno(paragraphs: 1, words: 10) : ""}",
-                                  style: TextStyle(fontSize: 20)),
-                            );
-                          },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: StaggeredGridView.countBuilder(
+                            itemCount: products.length,
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: context.dp(10),
+                            shrinkWrap: true,
+                            staggeredTileBuilder: (i) => StaggeredTile.fit(1),
+                            itemBuilder: (_, index) {
+                              return products[index];
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -99,5 +116,139 @@ class _HomeState extends State<Home> {
             foregroundColor: MaterialStateProperty.all(Colors.black54)),
         onPressed: () {},
         child: Text(title, style: TextStyle(fontWeight: FontWeight.w700)));
+  }
+}
+
+class ProductContainer extends StatelessWidget {
+  const ProductContainer({
+    Key? key,
+    required this.imgPath,
+  }) : super(key: key);
+  final String imgPath;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+              color: Color(0xFFC0C0C0), blurRadius: 5, offset: Offset(0, 0)),
+        ],
+      ),
+      margin: EdgeInsets.only(right: 5),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: FractionallySizedBox(
+              widthFactor: 1,
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: 200,
+                  minHeight: 100,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  image: DecorationImage(
+                      image: AssetImage(ImagePaths.earphone),
+                      fit: BoxFit.fitWidth),
+                ),
+                child: Column(
+                  children: [
+                    Align(alignment: Alignment.topRight, child: Text("-20%")),
+                  ],
+                ),
+              ),
+            ),
+            //  Stack(
+            //   children: [
+            //     FractionallySizedBox(
+            //       widthFactor: 1,
+            //       child: ConstrainedBox(
+            //         constraints: const BoxConstraints(minHeight: 100),
+            //         child: Image.asset(imgPath, fit: BoxFit.cover),
+            //       ),
+            //     ),
+            //     Positioned(
+            //       right: 0,
+            //       child: IconButton(
+            //           constraints: BoxConstraints(),
+            //           onPressed: () {},
+            //           color: Color(0xFFFFFFFF),
+            //           icon: Icon(CupertinoIcons.heart_circle_fill)),
+            //     ),
+            //     Positioned(
+            //       bottom: 0,
+            //       left: 0,
+            //       right: 0,
+            //       child: Padding(
+            //         padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+            //         child: Row(
+            //           mainAxisSize: MainAxisSize.min,
+            //           crossAxisAlignment: CrossAxisAlignment.end,
+            //           children: [
+            //             Flexible(
+            //               child: Text(
+            //                   "Flutter is awesome to learn. Flutter is fun as well",
+            //                   maxLines: 2,
+            //                   style: Theme.of(context).textTheme.subtitle2),
+            //             ),
+            //             Text("\$20.25",
+            //                 style: Theme.of(context).textTheme.subtitle2),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "3 Pack 360 Spin Magic Mop Replacement Heat Shower Mop",
+                  maxLines: 2,
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    Text("Rs: 499"),
+                    const SizedBox(width: 5),
+                    Text(
+                      "Rs: 699",
+                      style: TextStyle(
+                          fontSize: 11, decoration: TextDecoration.lineThrough),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    ...List.generate(
+                        5,
+                        (i) => Icon(CupertinoIcons.star_fill,
+                            size: 14, color: Color(0xFFF7EA3B))),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "Pakistan",
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle2
+                      ?.copyWith(fontSize: 11, color: Color(0xFF919191)),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
