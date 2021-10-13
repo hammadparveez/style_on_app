@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/exports/ui_exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
@@ -14,6 +15,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _controllers = LinkedScrollControllerGroup();
+  late ScrollController mainController;
+  late ScrollController nestController;
   final salomonBottomBarItems = [
     SalomonBottomBarItem(
         icon: const Icon(CupertinoIcons.home),
@@ -44,10 +48,16 @@ class _HomeState extends State<Home> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    mainController = _controllers.addAndGet();
+    nestController = _controllers.addAndGet();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final heightExcludeAppbar = context.h() - kToolbarHeight;
     return Scaffold(
-      backgroundColor: Color(0xFFE6E6E6),
       appBar: AppBar(
           backgroundColor: Colors.white,
           leading: IconButton(
@@ -55,6 +65,7 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
           )),
       body: SingleChildScrollView(
+        controller: mainController,
         child: SizedBox(
           height: heightExcludeAppbar,
           child: Column(
@@ -86,11 +97,13 @@ class _HomeState extends State<Home> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: StaggeredGridView.countBuilder(
+                            controller: nestController,
                             itemCount: products.length,
                             crossAxisCount: 2,
                             crossAxisSpacing: 5,
                             mainAxisSpacing: context.dp(10),
                             shrinkWrap: true,
+                            //physics: ClampingScrollPhysics(),
                             staggeredTileBuilder: (i) => StaggeredTile.fit(1),
                             itemBuilder: (_, index) {
                               return products[index];
@@ -134,10 +147,18 @@ class ProductContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: imageRadius,
-      child: ColoredBox(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        borderRadius: imageRadius,
         color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+              color: Color(0xFFD4D4D4), blurRadius: 2, offset: Offset(0, 1)),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: imageRadius,
         child: Column(
           children: [
             _buildProductImageStackedIcons(),

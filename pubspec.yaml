@@ -53,6 +53,8 @@ dependencies:
   flutter_svg: ^0.22.0
   #dummy paragraph
   flutter_ameno_ipsum: ^1.0.1
+  #Sync scrolling
+  linked_scroll_controller: ^0.2.0
 
 dev_dependencies:
   flutter_test:
