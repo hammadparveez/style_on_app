@@ -16,8 +16,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _controllers = LinkedScrollControllerGroup();
-  late ScrollController mainController;
-  late ScrollController nestController;
+
+  late TrackingScrollController mainController;
+  late TrackingScrollController nestController;
+  bool hasScrolled = false;
   final salomonBottomBarItems = [
     SalomonBottomBarItem(
         icon: const Icon(CupertinoIcons.home),
@@ -50,80 +52,171 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    mainController = _controllers.addAndGet();
-    nestController = _controllers.addAndGet();
+    mainController = TrackingScrollController(); //_controllers.addAndGet();
+    nestController = TrackingScrollController(); //_controllers.addAndGet();
+
+    mainController.addListener(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final heightExcludeAppbar = context.h() - kToolbarHeight;
+
+//Slivers
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          )),
-      body: SingleChildScrollView(
-        controller: mainController,
-        child: SizedBox(
-          height: heightExcludeAppbar,
-          child: Column(
-            children: [
-              SizedBox(
-                height: heightExcludeAppbar * .2,
-                child: Image.asset(ImagePaths.bg,
-                    width: context.w(), fit: BoxFit.cover),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            _buildCategoryButton(context, "Women"),
-                            _buildCategoryButton(context, "Men"),
-                            _buildCategoryButton(context, "Kids"),
-                            _buildCategoryButton(context, "Babies"),
-                            _buildCategoryButton(context, "Boys"),
-                            _buildCategoryButton(context, "Women Small"),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: StaggeredGridView.countBuilder(
-                            controller: nestController,
-                            itemCount: products.length,
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: context.dp(10),
-                            shrinkWrap: true,
-                            //physics: ClampingScrollPhysics(),
-                            staggeredTileBuilder: (i) => StaggeredTile.fit(1),
-                            itemBuilder: (_, index) {
-                              return products[index];
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              color: Colors.black,
+              icon: Icon(Icons.arrow_back_ios_new),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
           ),
-        ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 0),
+              child: Image.asset(
+                ImagePaths.bg,
+                width: context.w(),
+                fit: BoxFit.cover,
+                height: heightExcludeAppbar * .2,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildCategoryButton(context, "Women"),
+                  _buildCategoryButton(context, "Men"),
+                  _buildCategoryButton(context, "Kids"),
+                  _buildCategoryButton(context, "Babies"),
+                  _buildCategoryButton(context, "Boys"),
+                  _buildCategoryButton(context, "Women Small"),
+                ],
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            sliver: SliverStaggeredGrid.countBuilder(
+              itemCount: products.length,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 20,
+              staggeredTileBuilder: (i) => StaggeredTile.fit(1),
+              crossAxisCount: 2,
+              itemBuilder: (ctx, index) => products[index],
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: SalomonBottomBar(
-        currentIndex: 1,
+        currentIndex: 0,
         items: salomonBottomBarItems,
       ),
     );
+
+    // ///Default
+    // return Scaffold(
+    //   appBar: AppBar(
+    //       backgroundColor: Colors.white,
+    //       leading: IconButton(
+    //         onPressed: () {},
+    //         icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+    //       )),
+    //   body: SingleChildScrollView(
+    //     controller: mainController,
+    //     child: SizedBox(
+    //       height: heightExcludeAppbar,
+    //       child: Column(
+    //         children: [
+    //           SizedBox(
+    //             height: heightExcludeAppbar * .2,
+    //             child: Image.asset(
+    //               ImagePaths.bg,
+    //               width: context.w(),
+    //               fit: BoxFit.cover,
+    //             ),
+    //           ),
+    //           Expanded(
+    //             child: Padding(
+    //               padding: const EdgeInsets.all(8.0),
+    //               child: Column(
+    //                 children: [
+    //                   SingleChildScrollView(
+    //                     scrollDirection: Axis.horizontal,
+    //                     child: Row(
+    //                       children: [
+    //                         _buildCategoryButton(context, "Women"),
+    //                         _buildCategoryButton(context, "Men"),
+    //                         _buildCategoryButton(context, "Kids"),
+    //                         _buildCategoryButton(context, "Babies"),
+    //                         _buildCategoryButton(context, "Boys"),
+    //                         _buildCategoryButton(context, "Women Small"),
+    //                       ],
+    //                     ),
+    //                   ),
+    //                   NotificationListener<ScrollEndNotification>(
+    //                     onNotification: (value) {
+    //                       debugPrint("${value.metrics}");
+    //                       final offset = value.metrics.pixels;
+
+    //                       debugPrint(
+    //                           " Animationed: ${offset > (heightExcludeAppbar * .2)}");
+    //                       if (!hasScrolled && offset > 0) {
+    //                         setState(() => hasScrolled = !hasScrolled);
+    //                         mainController.animateTo(heightExcludeAppbar * .2,
+    //                             duration: Duration(milliseconds: 500),
+    //                             curve: Curves.linear);
+    //                       } else {
+    //                         setState(() => hasScrolled = !hasScrolled);
+    //                         mainController.animateTo(0,
+    //                             duration: Duration(milliseconds: 500),
+    //                             curve: Curves.linear);
+    //                       }
+    //                       // if (offset > 0)
+    //                       //   mainController.jumpTo(heightExcludeAppbar * .2);
+    //                       // else
+    //                       //   mainController.jumpTo(0);
+    //                       return true;
+    //                     },
+    //                     child: Expanded(
+    //                       child: Padding(
+    //                         padding: const EdgeInsets.only(left: 8.0),
+    //                         child: StaggeredGridView.countBuilder(
+    //                           controller: nestController,
+    //                           itemCount: products.length,
+    //                           crossAxisCount: 2,
+    //                           crossAxisSpacing: 5,
+    //                           mainAxisSpacing: context.dp(10),
+    //                           shrinkWrap: true,
+    //                           //physics: ClampingScrollPhysics(),
+    //                           staggeredTileBuilder: (i) => StaggeredTile.fit(1),
+    //                           itemBuilder: (_, index) {
+    //                             return products[index];
+    //                           },
+    //                         ),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    //   bottomNavigationBar: SalomonBottomBar(
+    //     currentIndex: 1,
+    //     items: salomonBottomBarItems,
+    //   ),
+    // );
   }
 
   TextButton _buildCategoryButton(BuildContext context, String title) {
