@@ -8,3 +8,6 @@ export "package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart";
 export "package:flutter_svg/flutter_svg.dart";
 export "package:bottom_navy_bar/bottom_navy_bar.dart";
 export "package:salomon_bottom_bar/salomon_bottom_bar.dart";
+export 'package:dots_indicator/dots_indicator.dart';
+export 'package:carousel_slider/carousel_slider.dart';
+
