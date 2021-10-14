@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
@@ -15,11 +17,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final _controllers = LinkedScrollControllerGroup();
+  int selectedIndex = 0;
 
-  late TrackingScrollController mainController;
-  late TrackingScrollController nestController;
-  bool hasScrolled = false;
   final salomonBottomBarItems = [
     SalomonBottomBarItem(
         icon: const Icon(CupertinoIcons.home),
@@ -52,63 +51,92 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    mainController = TrackingScrollController(); //_controllers.addAndGet();
-    nestController = TrackingScrollController(); //_controllers.addAndGet();
-
-    mainController.addListener(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final heightExcludeAppbar = context.h() - kToolbarHeight;
-
+    final slideShows = [
+      Stack(
+        children: [
+          Image.asset(
+            ImagePaths.bg,
+            fit: BoxFit.cover,
+            width: context.w(),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 10,
+            child: DotsIndicator(
+              decorator: DotsDecorator(
+                activeColor: Colors.red,
+                color: Colors.white,
+              ),
+              position: 2,
+              dotsCount: 4,
+            ),
+          ),
+        ],
+      ),
+    ];
 //Slivers
     return Scaffold(
+      drawer: Drawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            foregroundColor: Colors.black,
             backgroundColor: Colors.white,
-            leading: IconButton(
-              color: Colors.black,
-              icon: Icon(Icons.arrow_back_ios_new),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
+            actions: [
+              IconButton(icon: Icon(CupertinoIcons.search), onPressed: () {}),
+              IconButton(icon: Icon(CupertinoIcons.bell), onPressed: () {}),
+              IconButton(
+                  icon: Icon(CupertinoIcons.ellipsis_vertical),
+                  onPressed: () {}),
+            ],
           ),
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(bottom: 0),
-              child: Image.asset(
-                ImagePaths.bg,
-                width: context.w(),
-                fit: BoxFit.cover,
-                height: heightExcludeAppbar * .2,
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: heightExcludeAppbar * .25,
+                  enlargeCenterPage: true,
+                  viewportFraction: 1,
+                  autoPlay: true,
+                  //autoPlayInterval: ,
+                  autoPlayCurve: Curves.ease,
+                ),
+                items: [...slideShows],
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _buildCategoryButton(context, "Women"),
-                  _buildCategoryButton(context, "Men"),
-                  _buildCategoryButton(context, "Kids"),
-                  _buildCategoryButton(context, "Babies"),
-                  _buildCategoryButton(context, "Boys"),
-                  _buildCategoryButton(context, "Women Small"),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  children: [
+                    _buildCategoryButton(context, "Women"),
+                    _buildCategoryButton(context, "Men"),
+                    _buildCategoryButton(context, "Kids"),
+                    _buildCategoryButton(context, "Babies"),
+                    _buildCategoryButton(context, "Boys"),
+                    _buildCategoryButton(context, "Women Small"),
+                  ],
+                ),
               ),
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             sliver: SliverStaggeredGrid.countBuilder(
               itemCount: products.length,
               crossAxisSpacing: 8,
               mainAxisSpacing: 20,
-              staggeredTileBuilder: (i) => StaggeredTile.fit(1),
+              staggeredTileBuilder: (i) => const StaggeredTile.fit(1),
               crossAxisCount: 2,
               itemBuilder: (ctx, index) => products[index],
             ),
@@ -116,8 +144,11 @@ class _HomeState extends State<Home> {
         ],
       ),
       bottomNavigationBar: SalomonBottomBar(
-        currentIndex: 0,
+        currentIndex: selectedIndex,
         items: salomonBottomBarItems,
+        curve: Curves.decelerate,
+        selectedItemColor: Colors.black,
+        onTap: (index) => setState(() => selectedIndex = index),
       ),
     );
 
