@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int selectedIndex = 0;
+  double _currentIndicatorDot = 0;
 
   final salomonBottomBarItems = [
     SalomonBottomBarItem(
@@ -57,28 +58,9 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final heightExcludeAppbar = context.h() - kToolbarHeight;
     final slideShows = [
-      Stack(
-        children: [
-          Image.asset(
-            ImagePaths.bg,
-            fit: BoxFit.cover,
-            width: context.w(),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 10,
-            child: DotsIndicator(
-              decorator: DotsDecorator(
-                activeColor: Colors.red,
-                color: Colors.white,
-              ),
-              position: 2,
-              dotsCount: 4,
-            ),
-          ),
-        ],
-      ),
+      _buildSlideImage(context, ImagePaths.p2),
+      _buildSlideImage(context, ImagePaths.bg),
+      _buildSlideImage(context, ImagePaths.color),
     ];
 //Slivers
     return Scaffold(
@@ -101,14 +83,16 @@ class _HomeState extends State<Home> {
               padding: EdgeInsets.only(bottom: 0),
               child: CarouselSlider(
                 options: CarouselOptions(
+                  enableInfiniteScroll: false,
                   height: heightExcludeAppbar * .25,
-                  enlargeCenterPage: true,
                   viewportFraction: 1,
                   autoPlay: true,
-                  //autoPlayInterval: ,
+                  reverse: false,
                   autoPlayCurve: Curves.ease,
+                  onPageChanged: (index, reason) =>
+                      setState(() => _currentIndicatorDot = index.toDouble()),
                 ),
-                items: [...slideShows],
+                items: slideShows,
               ),
             ),
           ),
@@ -248,6 +232,40 @@ class _HomeState extends State<Home> {
     //     items: salomonBottomBarItems,
     //   ),
     // );
+  }
+
+  Stack _buildSlideImage(BuildContext context, String path) {
+    return Stack(
+      children: [
+        Image.asset(
+          path,
+          fit: BoxFit.cover,
+          width: context.w(),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 10,
+          child: PlayAnimation<double>(
+            tween: Tween(
+                begin: _currentIndicatorDot == 0 ? 0 : _currentIndicatorDot - 1,
+                end: _currentIndicatorDot),
+            duration: const Duration(milliseconds: 500),
+            builder: (_, child, value) => DotsIndicator(
+              decorator: DotsDecorator(
+                activeColor: Colors.red,
+                color: Colors.white,
+                activeSize: const Size(25, 8),
+                activeShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              position: value,
+              dotsCount: 3,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   TextButton _buildCategoryButton(BuildContext context, String title) {
