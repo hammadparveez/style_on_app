@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "125328057795",
+    "project_id": "styleo-481c5",
+    "storage_bucket": "styleo-481c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125328057795:android:cd713c8469f9285eba4976",
+        "android_client_info": {
+          "package_name": "com.example.style_on_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "125328057795-g3rs25bh6pj8ab5vt4aigv222dd2pbiq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.style_on_app",
+            "certificate_hash": "ccbff970abbc1e605fdeea215a9b3e8698aa8545"
+          }
+        },
+        {
+          "client_id": "125328057795-hg3diaer7041s3qantfkm4ggv0f3rlvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC4yNAEXQW0xh9AbpGMQQT1u5dgpWHYko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "125328057795-hg3diaer7041s3qantfkm4ggv0f3rlvg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

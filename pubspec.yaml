@@ -54,6 +54,9 @@ dependencies:
   hive_flutter: ^1.1.0
   #Utils
   flutter_svg: ^0.22.0
+  path_provider: ^2.0.5
+  image_picker: ^0.8.4+2
+  file_picker: ^4.1.4
   #dummy paragraph
   flutter_ameno_ipsum: ^1.0.1
   #Sync scrolling
