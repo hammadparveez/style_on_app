@@ -1,5 +1,6 @@
-import "package:style_on_app/exports/ui_exports.dart";
+import "package:style_on_app/exports.dart";
 
 void main() async {
-  runApp(  App());
+  await initConfig();
+  runApp(const App());
 }

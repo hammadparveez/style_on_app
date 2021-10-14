@@ -1,4 +1,10 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:style_on_app/exports.dart';
+import "package:path/path.dart" as path;
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({Key? key}) : super(key: key);
@@ -56,6 +62,22 @@ class _AddProductScreenState extends State<AddProductScreen> {
           _textField(priceController, "Price"),
           //Discount Price optional
           _textField(discountPriceController, "Discount Price"),
+          ElevatedButton(
+              onPressed: () async {
+                final imagePicker = ImagePicker();
+                // final xfile =
+                //     await imagePicker.pickImage(source: ImageSource.gallery);
+                // String ext = path.extension(xfile!.path);
+                final url = await FirebaseStorage.instance
+                    .ref('Photos/842534.png')
+                    .getDownloadURL();
+                debugPrint("$url");
+                // final uploadTask =  FirebaseStorage.instance
+                //     .ref('Photos/${Random().nextInt(9099090)}${ext}')
+
+                //     .putFile(File(xfile.path));
+              },
+              child: Text("Add Product")),
           //Images
 
           ///optional

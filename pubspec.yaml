@@ -61,6 +61,15 @@ dependencies:
   flutter_ameno_ipsum: ^1.0.1
   #Sync scrolling
   linked_scroll_controller: ^0.2.0
+  #Core Plugins
+  awesome_notifications: ^0.0.6+11
+  firebase_core: ^1.7.0
+  cloud_functions: ^3.0.4
+  firebase_storage: ^10.0.5
+  firebase_dynamic_links: ^2.0.10
+  firebase_auth: ^3.1.3
+  cloud_firestore: ^2.5.3
+  firebase_messaging: ^10.0.8
 
 dev_dependencies:
   flutter_test:
