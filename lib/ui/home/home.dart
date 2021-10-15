@@ -95,14 +95,12 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-    
     );
   }
 
   Stack _buildSlideImage(String path) {
     return Stack(
       children: [
-        
         Image.asset(
           path,
           fit: BoxFit.cover,

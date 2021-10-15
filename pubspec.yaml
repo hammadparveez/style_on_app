@@ -63,6 +63,7 @@ dependencies:
   linked_scroll_controller: ^0.2.0
   #Core Plugins
   uuid: ^3.0.5
+  extended_image: ^5.1.2
   awesome_notifications: ^0.0.6+11
   firebase_core: ^1.7.0
   cloud_functions: ^3.0.4

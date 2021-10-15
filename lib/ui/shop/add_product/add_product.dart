@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:style_on_app/exports.dart';
 import "package:path/path.dart" as path;
+import 'package:style_on_app/exports/pkgs_exports.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({Key? key}) : super(key: key);
@@ -16,6 +19,7 @@ class AddProductScreen extends StatefulWidget {
 
 class _AddProductScreenState extends State<AddProductScreen> {
   List<XFile>? pickedFile;
+  bool hasPickedImage = false;
   late ImagePicker imagePicker;
   late TextEditingController titleController,
       descriptionController,
@@ -24,7 +28,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
       priceController,
       discountPriceController,
       optionalFieldsController,
-      categoryController;
+      categoryController,
+      deliveryOptionController,
+      sellerNameController;
 
   @override
   void initState() {
@@ -38,6 +44,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     discountPriceController = TextEditingController();
     optionalFieldsController = TextEditingController();
     categoryController = TextEditingController();
+    deliveryOptionController = TextEditingController();
+    sellerNameController = TextEditingController();
   }
 
   @override
@@ -50,16 +58,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
     discountPriceController.dispose();
     optionalFieldsController.dispose();
     categoryController.dispose();
+    deliveryOptionController.dispose();
+    sellerNameController.dispose();
     super.dispose();
   }
 
   _onImageAdd() async {
     pickedFile = await imagePicker.pickMultiImage();
+    if (pickedFile != null) setState(() => hasPickedImage = true);
   }
 
   _onSaveData() async {
     if (pickedFile != null && pickedFile!.isNotEmpty) {
-      List<String>? storagePaths;
+      List<String>? storagePaths = [];
       final title = titleController.text;
       final brand = brandController.text;
       final category = categoryController.text;
@@ -67,15 +78,45 @@ class _AddProductScreenState extends State<AddProductScreen> {
       final qty = quantityController.text;
       final price = priceController.text;
       final discountPrice = discountPriceController.text;
+      final options = optionalFieldsController.text;
+      final sellerName = sellerNameController.text;
+
       const uuid = Uuid();
-      //Excluding -(dashes) and Alphabets (a-z)
+      final idBy = uuid.v1().replaceAll(RegExp(r"[a-z]+|-"), '');
+      //Create Image IDs and Firebase Storage Paths List
       for (var image in pickedFile!) {
-        final imageId = uuid.v4().replaceAll(RegExp(r"[a-z]+|-"), '');
+        //Excluding -(dashes) and Alphabets (a-z)
+        final imageNumberID = uuid.v4().replaceAll(RegExp(r"[a-z]+|-"), '');
         final fileExt = path.extension(image.path);
-        final imageName = imageId + fileExt;
-        final storagePath = "Products/$category/$brand/$imageName";
-          storagePaths!.add(storagePath);
+        final imageName = imageNumberID + fileExt;
+        final storagePath = "Products/$brand/$category/$idBy/$imageName";
+        await FirebaseStorage.instance
+            .ref(storagePath)
+            .putFile(File(image.path));
+        final downloadUrl =
+            await FirebaseStorage.instance.ref(storagePath).getDownloadURL();
+        storagePaths.add(downloadUrl);
       }
+      final productImgSearlized = jsonEncode(storagePaths);
+      log("URLS: $productImgSearlized");
+      FirebaseFirestore.instance
+          .collection("shop")
+          .doc("products")
+          .collection("products")
+          .add({
+        "productID": uuid.v1().replaceAll(RegExp(r"[a-z]+|-"), ''),
+        "title": title,
+        "description": desc,
+        "images": productImgSearlized,
+        "quantity": qty,
+        "price": price,
+        "discountPrice": discountPrice,
+        "options": options,
+        "seller": sellerName,
+        "category": category,
+        "brand": brand,
+        "rating": 0,
+      });
     }
   }
 
@@ -83,7 +124,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.pink,
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -95,18 +136,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
               //Desc
               _textField(descriptionController, "Desc"),
               //Category
-              _textField(categoryController, "Desc"),
+              _textField(categoryController, "Category"),
               //Product Quantitiy
               _textField(quantityController, "Quantity"),
               //Price
               _textField(priceController, "Price"),
               //Discount Price optional
               _textField(discountPriceController, "Discount Price"),
-              //Images
-              ElevatedButton(onPressed: _onImageAdd, child: Text("Add Image")),
+
+              _textField(sellerNameController, "Seller Name"),
 
               ///optional Color: 0xff0000ff, 0xff00ff00, 0xffff0000 / Size: M,L,S / Weight: 200KG, 150KG 0.5KG
-              _textField(optionalFieldsController, "Discount Price"),
+              _textField(optionalFieldsController, "OptionalFields"),
+              //Images
+              ElevatedButton(onPressed: _onImageAdd, child: Text("Add Image")),
               //Add Product Button
               ElevatedButton(
                   onPressed: _onSaveData, child: Text("Add Product")),
@@ -128,7 +171,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
       onChanged: onChanged,
       validator: validator,
       decoration: InputDecoration(
-          hintText: title, hintStyle: const TextStyle(color: Colors.white)),
+          suffixIcon: IconButton(
+              icon: Icon(Icons.clear_sharp), onPressed: controller.clear),
+          hintText: title,
+          hintStyle: const TextStyle(color: Colors.white)),
     );
   }
 }
