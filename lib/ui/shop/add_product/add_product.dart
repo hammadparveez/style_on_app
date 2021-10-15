@@ -1,5 +1,6 @@
+import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,22 +15,29 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+  List<XFile>? pickedFile;
+  late ImagePicker imagePicker;
   late TextEditingController titleController,
       descriptionController,
       quantityController,
       brandController,
       priceController,
-      discountPriceController;
+      discountPriceController,
+      optionalFieldsController,
+      categoryController;
 
   @override
   void initState() {
     super.initState();
+    imagePicker = ImagePicker();
     titleController = TextEditingController();
     descriptionController = TextEditingController();
     quantityController = TextEditingController();
     brandController = TextEditingController();
     priceController = TextEditingController();
     discountPriceController = TextEditingController();
+    optionalFieldsController = TextEditingController();
+    categoryController = TextEditingController();
   }
 
   @override
@@ -40,50 +48,71 @@ class _AddProductScreenState extends State<AddProductScreen> {
     brandController.dispose();
     priceController.dispose();
     discountPriceController.dispose();
+    optionalFieldsController.dispose();
+    categoryController.dispose();
     super.dispose();
+  }
+
+  _onImageAdd() async {
+    pickedFile = await imagePicker.pickMultiImage();
+  }
+
+  _onSaveData() async {
+    if (pickedFile != null && pickedFile!.isNotEmpty) {
+      List<String>? storagePaths;
+      final title = titleController.text;
+      final brand = brandController.text;
+      final category = categoryController.text;
+      final desc = descriptionController.text;
+      final qty = quantityController.text;
+      final price = priceController.text;
+      final discountPrice = discountPriceController.text;
+      const uuid = Uuid();
+      //Excluding -(dashes) and Alphabets (a-z)
+      for (var image in pickedFile!) {
+        final imageId = uuid.v4().replaceAll(RegExp(r"[a-z]+|-"), '');
+        final fileExt = path.extension(image.path);
+        final imageName = imageId + fileExt;
+        final storagePath = "Products/$category/$brand/$imageName";
+          storagePaths!.add(storagePath);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueAccent,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          //Title
-          _textField(titleController, "Title"),
-          //Brand company name
-          _textField(brandController, "Brand"),
-          //Desc
-          _textField(descriptionController, "Desc"),
-          //Product Quantitiy
-          _textField(quantityController, "Quantity"),
-          //Price
-          _textField(priceController, "Price"),
-          //Discount Price optional
-          _textField(discountPriceController, "Discount Price"),
-          ElevatedButton(
-              onPressed: () async {
-                final imagePicker = ImagePicker();
-                // final xfile =
-                //     await imagePicker.pickImage(source: ImageSource.gallery);
-                // String ext = path.extension(xfile!.path);
-                final url = await FirebaseStorage.instance
-                    .ref('Photos/842534.png')
-                    .getDownloadURL();
-                debugPrint("$url");
-                // final uploadTask =  FirebaseStorage.instance
-                //     .ref('Photos/${Random().nextInt(9099090)}${ext}')
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.blueAccent,
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //Title
+              _textField(titleController, "Title"),
+              //Brand company name
+              _textField(brandController, "Brand"),
+              //Desc
+              _textField(descriptionController, "Desc"),
+              //Category
+              _textField(categoryController, "Desc"),
+              //Product Quantitiy
+              _textField(quantityController, "Quantity"),
+              //Price
+              _textField(priceController, "Price"),
+              //Discount Price optional
+              _textField(discountPriceController, "Discount Price"),
+              //Images
+              ElevatedButton(onPressed: _onImageAdd, child: Text("Add Image")),
 
-                //     .putFile(File(xfile.path));
-              },
-              child: Text("Add Product")),
-          //Images
-
-          ///optional
-          //Color
-          //Size
-        ],
+              ///optional Color: 0xff0000ff, 0xff00ff00, 0xffff0000 / Size: M,L,S / Weight: 200KG, 150KG 0.5KG
+              _textField(optionalFieldsController, "Discount Price"),
+              //Add Product Button
+              ElevatedButton(
+                  onPressed: _onSaveData, child: Text("Add Product")),
+            ],
+          ),
+        ),
       ),
     );
   }
