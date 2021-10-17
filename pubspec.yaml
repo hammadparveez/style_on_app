@@ -62,8 +62,7 @@ dependencies:
   #Sync scrolling
   linked_scroll_controller: ^0.2.0
   #Core Plugins
-  freezed: ^0.15.0+1
-  freezed_annotation:
+  freezed_annotation: ^0.14.0
   uuid: ^3.0.5
   extended_image: ^5.1.2
   awesome_notifications: ^0.0.6+11
@@ -78,8 +77,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    build_runner:
-    freezed: ^0.15.0+1
+    
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -87,6 +85,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  freezed: ^0.14.0
+  build_runner: ^2.1.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

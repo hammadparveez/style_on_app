@@ -1,16 +1,21 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:style_on_app/exports.dart';
 
 class ProductContainer extends StatelessWidget {
-  ProductContainer({
-    Key? key,
-    required this.imgPath,
-  }) : super(key: key);
   final String imgPath;
-
   final double _bottomPaddingValue = 15;
   final imageRadius = BorderRadius.circular(8);
+  final String title;
+  final bool hasAddedWishList;
+  final int rating;
+
+  ProductContainer(
+      {Key? key,
+      required this.imgPath,
+      required this.title,
+      required this.hasAddedWishList,
+      required this.rating})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +54,7 @@ class ProductContainer extends StatelessWidget {
                   height: 20,
                 ),
           Text(
-            "3 Pack 360 Spin Magic Mop Replacement Heat Shower Mop",
+            "$title",
             maxLines: 2,
             style: Theme.of(context).textTheme.subtitle2,
           ),
@@ -85,10 +90,13 @@ class ProductContainer extends StatelessWidget {
     return Positioned.fill(
       child: Padding(
         padding: EdgeInsets.only(bottom: _bottomPaddingValue),
-        child: Image.asset(
+        child: ExtendedImage.network(
           imgPath,
-          fit: BoxFit.cover,
         ),
+        // Image.asset(
+        //   imgPath,
+        //   fit: BoxFit.cover,
+        // ),
       ),
     );
   }

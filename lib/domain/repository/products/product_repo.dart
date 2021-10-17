@@ -1,3 +1,3 @@
 abstract class ProductRepo {
-  Future<T> getProducts<T>();
+  Future<T?> getProducts<T>();
 }

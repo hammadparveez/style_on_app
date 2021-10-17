@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:style_on_app/domain/freezed_collection.dart';
+import 'package:style_on_app/domain/services/riverpod/pods.dart';
 
 import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
@@ -14,6 +16,18 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int selectedIndex = 0;
   double _currentIndicatorDot = 0;
+  List<ProductModel>? models;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      if (mounted)
+        (await context
+            .read(productService)
+            .getInitialProducts<List<ProductModel>>());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,17 +96,26 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            sliver: SliverStaggeredGrid.countBuilder(
-              itemCount: products.length,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 20,
-              staggeredTileBuilder: (i) => const StaggeredTile.fit(1),
-              crossAxisCount: 2,
-              itemBuilder: (ctx, index) => products[index],
-            ),
-          ),
+          Consumer(builder: (context, watch, child) {
+            final $products = watch(productService).products;
+            debugPrint("Products ${$products}");
+            return SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              sliver: SliverStaggeredGrid.countBuilder(
+                itemCount: $products.length,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 20,
+                staggeredTileBuilder: (i) => const StaggeredTile.fit(1),
+                crossAxisCount: 2,
+                itemBuilder: (ctx, index) => ProductContainer(
+                  imgPath: $products[index].imagesLinks![0],
+                  title: $products[index].title,
+                  rating: $products[index].rating,
+                  hasAddedWishList: false,
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -162,15 +185,15 @@ final salomonBottomBarItems = [
 ];
 
 final products = [
-  ProductContainer(imgPath: ImagePaths.color),
-  ProductContainer(imgPath: ImagePaths.d2),
-  ProductContainer(imgPath: ImagePaths.d3),
-  ProductContainer(imgPath: ImagePaths.d1),
-  ProductContainer(imgPath: ImagePaths.d4),
-  ProductContainer(imgPath: ImagePaths.d5),
-  ProductContainer(imgPath: ImagePaths.d6),
-  ProductContainer(imgPath: ImagePaths.p5),
-  ProductContainer(imgPath: ImagePaths.p6),
-  ProductContainer(imgPath: ImagePaths.authMainImg),
-  ProductContainer(imgPath: ImagePaths.onBoardImg),
+  // ProductContainer(imgPath: ImagePaths.color),
+  // ProductContainer(imgPath: ImagePaths.d2),
+  // ProductContainer(imgPath: ImagePaths.d3),
+  // ProductContainer(imgPath: ImagePaths.d1),
+  // ProductContainer(imgPath: ImagePaths.d4),
+  // ProductContainer(imgPath: ImagePaths.d5),
+  // ProductContainer(imgPath: ImagePaths.d6),
+  // ProductContainer(imgPath: ImagePaths.p5),
+  // ProductContainer(imgPath: ImagePaths.p6),
+  // ProductContainer(imgPath: ImagePaths.authMainImg),
+  // ProductContainer(imgPath: ImagePaths.onBoardImg),
 ];

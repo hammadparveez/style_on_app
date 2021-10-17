@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 class ProductModel {
   final String id, title, desc, brand, sellerName, category, price, quantity;
   String? discountPrice;
   List<Map<String, dynamic>>? options;
-  List<String?> imagesLinks;
+  List<dynamic>? imagesLinks;
   int rating;
 
   ProductModel(
@@ -15,7 +17,7 @@ class ProductModel {
       required this.price,
       required this.quantity,
       this.rating = 0,
-      this.imagesLinks = const [],
+      this.imagesLinks,
       this.discountPrice,
       this.options});
 
@@ -26,12 +28,12 @@ class ProductModel {
       desc: json['description'],
       brand: json['brand'],
       sellerName: json['seller'],
-      category: json['id'],
-      price: json['id'],
+      category: json['category'],
+      price: json['price'],
       quantity: json['quantity'],
       discountPrice: json['discountPrice'],
       options: json['options'],
-      imagesLinks: json['images'],
+      imagesLinks: jsonDecode(json['images']),
       rating: json['rating'],
     );
   }
