@@ -2,16 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:style_on_app/exports.dart';
 
 class ProductContainer extends StatelessWidget {
-  final String imgPath;
+  final String imgPath, price;
   final double _bottomPaddingValue = 15;
   final imageRadius = BorderRadius.circular(8);
   final String title;
+  final String? discountPrice;
   final bool hasAddedWishList;
   final int rating;
 
   ProductContainer(
       {Key? key,
       required this.imgPath,
+      required this.price,
+      this.discountPrice,
       required this.title,
       required this.hasAddedWishList,
       required this.rating})
@@ -20,11 +23,11 @@ class ProductContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         borderRadius: imageRadius,
         color: Colors.white,
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
               color: Color(0xFFD4D4D4), blurRadius: 2, offset: Offset(0, 1)),
         ],
@@ -47,14 +50,8 @@ class ProductContainer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          !(imgPath == ImagePaths.d4)
-              ? const SizedBox()
-              : SvgPicture.asset(
-                  ImagePaths.googleIcon,
-                  height: 20,
-                ),
           Text(
-            "$title",
+            title,
             maxLines: 2,
             style: Theme.of(context).textTheme.subtitle2,
           ),
@@ -112,26 +109,33 @@ class ProductContainer extends StatelessWidget {
   }
 
   Text _buildPrices() {
-    return const Text.rich(
+    const discountStyle = TextStyle(color: Color(0xFFBBBBBB), fontSize: 11);
+    return Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: "Rs: 499"),
-            WidgetSpan(child: SizedBox(width: 5)),
+            TextSpan(text: "Rs: " + price),
+            const WidgetSpan(child: SizedBox(width: 5)),
+            if (discountPrice != null && discountPrice!.isNotEmpty)
+              TextSpan(
+                text: "Rs: ${discountPrice!} ",
+                style: discountStyle.copyWith(
+                    decoration: TextDecoration.lineThrough,
+                    decorationThickness: 3),
+              ),
             TextSpan(
-              text: "Rs: 699",
-              style: TextStyle(
-                  fontSize: 11, decoration: TextDecoration.lineThrough),
+              text: " ${calcDiscount(price, discountPrice!).toInt()}%",
+              style: discountStyle,
             ),
           ],
         ),
-        style: TextStyle(color: Color(0xFFD4A347)));
+        style: const TextStyle(color: Color(0xFFD4A347)));
   }
 
   Row _buildRatingBar() {
     return Row(
       children: [
         ...List.generate(
-            5,
+            rating,
             (i) => Icon(CupertinoIcons.star_fill,
                 size: 14, color: Color(0xFFF7EA3B))),
       ],

@@ -21,12 +21,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      if (mounted)
-        (await context
-            .read(productService)
-            .getInitialProducts<List<ProductModel>>());
-    });
   }
 
   @override
@@ -96,26 +90,58 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          Consumer(builder: (context, watch, child) {
-            final $products = watch(productService).products;
-            debugPrint("Products ${$products}");
-            return SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              sliver: SliverStaggeredGrid.countBuilder(
-                itemCount: $products.length,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 20,
-                staggeredTileBuilder: (i) => const StaggeredTile.fit(1),
-                crossAxisCount: 2,
-                itemBuilder: (ctx, index) => ProductContainer(
-                  imgPath: $products[index].imagesLinks![0],
-                  title: $products[index].title,
-                  rating: $products[index].rating,
-                  hasAddedWishList: false,
-                ),
+          Consumer(builder: (_, watch, child) {
+            return watch(productsSnapshot).when(
+                loading: () => const SliverToBoxAdapter(child: Text("Loading")),
+                error: (_, err) =>
+                    const SliverToBoxAdapter(child: Text("Loading")),
+                data: (data) {
+                  final products = data.docs;
+                  return SliverStaggeredGrid.countBuilder(
+                      itemCount: products.length,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 20,
+                      staggeredTileBuilder: (i) => const StaggeredTile.fit(1),
+                      crossAxisCount: 2,
+                      itemBuilder: (ctx, index) {
+                        final model = watch(productService)
+                            .parseMaptoModel(products[index]);
+                        return ProductContainer(
+                          imgPath: model.imagesLinks![1],
+                          title: model.title,
+                          price: model.price,
+                          discountPrice: model.discountPrice,
+                          rating: model.rating,
+                          hasAddedWishList: false,
+                        );
+                      });
+                });
+          }
+              // SliverToBoxAdapter(
+              //   child: Consumer(builder: (context, watch, child) {
+              //     final snapshot = watch(productStreamPod);
+              //     if (snapshot == null) return Text("Hello");
+              //     return snapshot.when(
+              //         error: (_, trace) => Text("Error"),
+              //         loading: () => Text("Loading...."),
+              //         data: (data) {
+              //           debugPrint("${data.runtimeType}");
+              //           return Padding(
+              //             padding: const EdgeInsets.symmetric(horizontal: 8),
+              //             child:
+              //               //  ProductContainer(
+              //               //   imgPath: $products[index].imagesLinks![0],
+              //               //   title: $products[index].title,
+              //               //   price: $products[index].price,
+              //               //   discountPrice: $products[index].discountPrice,
+              //               //   rating: $products[index].rating,
+              //               //   hasAddedWishList: false,
+              //               // ),
+              //             ),
+              //           );
+              //         });
+              //   }),
               ),
-            );
-          }),
         ],
       ),
     );

@@ -1,3 +1,8 @@
-abstract class ProductRepo {
-  Future<T?> getProducts<T>();
+abstract class ProductRepo extends ProductSnapshotRepo{
+  Future<T?> getProducts<T>([int limit]);
+
+}
+abstract class ProductSnapshotRepo {
+   itemSnapshot();
+  
 }
