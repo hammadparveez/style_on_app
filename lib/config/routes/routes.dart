@@ -1,4 +1,5 @@
 import 'package:style_on_app/exports.dart';
+import 'package:style_on_app/ui/detail_page/product_detail_page.dart';
 
 class Routes {
   static const onBoard = "onboard";
@@ -21,6 +22,9 @@ class Routes {
           return MainScreen();
         case auth:
           return const AuthScreen();
+        case detailProduct:
+          final model = (settings.arguments as ProductModel);
+          return  ProductDetailPage(model:model);
         case signUp:
           return const SignUp();
         case signIn:

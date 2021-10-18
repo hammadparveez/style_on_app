@@ -4,7 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:style_on_app/exports.dart';
 import "package:style_on_app/exports/ui_exports.dart";
 
-final naigatorKey = GlobalKey<NavigatorState>();
+final navigatorKey = GlobalKey<NavigatorState>();
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class App extends StatelessWidget {
               color: Colors.white,
             )),
       ),
-      navigatorKey: naigatorKey,
+      navigatorKey: navigatorKey,
       onGenerateRoute: Routes.onGenerateRoute,
       initialRoute: Routes.onBoard,
     );

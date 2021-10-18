@@ -10,7 +10,7 @@ class AuthScreen extends StatelessWidget {
       bgImgPath: ImagePaths.authMainImg,
       appBar: AuthAppBarWidget(
         onSkipPress: () {
-          naigatorKey.currentState?.pushNamed(Routes.home);
+          navigatorKey.currentState?.pushNamed(Routes.home);
         },
       ),
       body: Column(

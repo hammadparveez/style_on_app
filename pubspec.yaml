@@ -49,6 +49,7 @@ dependencies:
   salomon_bottom_bar: ^3.1.0
   carousel_slider: ^4.0.0
   dots_indicator: ^2.0.0
+  expandable: ^5.0.1
   #Local Storage
   hive: ^2.0.4
   hive_flutter: ^1.1.0

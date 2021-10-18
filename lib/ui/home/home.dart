@@ -106,42 +106,22 @@ class _HomeState extends State<Home> {
                       itemBuilder: (ctx, index) {
                         final model = watch(productService)
                             .parseMaptoModel(products[index]);
-                        return ProductContainer(
-                          imgPath: model.imagesLinks![1],
-                          title: model.title,
-                          price: model.price,
-                          discountPrice: model.discountPrice,
-                          rating: model.rating,
-                          hasAddedWishList: false,
+                        return GestureDetector(
+                          onTap: () => Navigator.pushNamed(
+                              context, Routes.detailProduct,
+                              arguments: model),
+                          child: ProductContainer(
+                            imgPath: model.imagesLinks![1],
+                            title: model.title,
+                            price: model.price,
+                            discountPrice: model.discountPrice,
+                            rating: model.rating,
+                            hasAddedWishList: false,
+                          ),
                         );
                       });
                 });
-          }
-              // SliverToBoxAdapter(
-              //   child: Consumer(builder: (context, watch, child) {
-              //     final snapshot = watch(productStreamPod);
-              //     if (snapshot == null) return Text("Hello");
-              //     return snapshot.when(
-              //         error: (_, trace) => Text("Error"),
-              //         loading: () => Text("Loading...."),
-              //         data: (data) {
-              //           debugPrint("${data.runtimeType}");
-              //           return Padding(
-              //             padding: const EdgeInsets.symmetric(horizontal: 8),
-              //             child:
-              //               //  ProductContainer(
-              //               //   imgPath: $products[index].imagesLinks![0],
-              //               //   title: $products[index].title,
-              //               //   price: $products[index].price,
-              //               //   discountPrice: $products[index].discountPrice,
-              //               //   rating: $products[index].rating,
-              //               //   hasAddedWishList: false,
-              //               // ),
-              //             ),
-              //           );
-              //         });
-              //   }),
-              ),
+          }),
         ],
       ),
     );

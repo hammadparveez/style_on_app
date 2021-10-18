@@ -30,6 +30,6 @@ class ProductRepoImpl extends ProductRepo with FirebaseRepo {
 
   @override
   itemSnapshot() {
-    return _getProductCollection.snapshots();
+    return _getProductCollection.limit(50).snapshots();
   }
 }

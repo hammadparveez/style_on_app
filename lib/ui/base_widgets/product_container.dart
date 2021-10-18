@@ -35,8 +35,9 @@ class ProductContainer extends StatelessWidget {
       child: ClipRRect(
         borderRadius: imageRadius,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _buildProductImageStackedIcons(),
+            Flexible(child: _buildProductImageStackedIcons()),
             _buildProductBrief(context),
           ],
         ),
@@ -117,13 +118,13 @@ class ProductContainer extends StatelessWidget {
             const WidgetSpan(child: SizedBox(width: 5)),
             if (discountPrice != null && discountPrice!.isNotEmpty)
               TextSpan(
-                text: "Rs: ${discountPrice!} ",
+                text: "Rs: ${discountPrice ?? '0'} ",
                 style: discountStyle.copyWith(
                     decoration: TextDecoration.lineThrough,
                     decorationThickness: 3),
               ),
             TextSpan(
-              text: " ${calcDiscount(price, discountPrice!).toInt()}%",
+              text: " ${calcDiscount(price, discountPrice ?? '0').toInt()}%",
               style: discountStyle,
             ),
           ],

@@ -6,6 +6,8 @@ class AppStrings {
   static const profile= "Profile";
   static const letsExplore = "Let's Explore";
   static const letsExplorDesc = "Explore the new\nworld of clothing";
+  static const detailPagePreview = "Product Detail";
+  static const desc= "Description";
   static const style = "Style";
   static const O = "O";
   static const signIn = "Sign In";

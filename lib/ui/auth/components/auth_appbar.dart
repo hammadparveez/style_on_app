@@ -12,7 +12,7 @@ class AuthAppBarWidget extends AppBar {
           key: key,
           backgroundColor: Colors.transparent,
           leading: IconButton(
-              onPressed: () => onBackPress ?? naigatorKey.currentState?.pop(),
+              onPressed: () => onBackPress ?? navigatorKey.currentState?.pop(),
               icon: Icon(Icons.arrow_back_ios_new)),
           elevation: 0,
           actions: [
