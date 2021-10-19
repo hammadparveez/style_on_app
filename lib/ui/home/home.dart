@@ -37,41 +37,16 @@ class _HomeState extends State<Home> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            foregroundColor: Colors.black,
-            backgroundColor: Colors.white,
+            foregroundColor: kThemeColor,
+            backgroundColor: kWhiteColor,
             actions: [
               IconButton(
                   icon: const Icon(CupertinoIcons.search), onPressed: () {}),
               IconButton(
                   icon: const Icon(CupertinoIcons.bell), onPressed: () {}),
-              PopupMenuButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                itemBuilder: (ctx) {
-                  return const [
-                    PopupMenuItem(child: Text("Flutter")),
-                    PopupMenuItem(child: Text("Dart")),
-                    PopupMenuItem(child: Text("Javascript")),
-                    PopupMenuItem(child: Text("React JS")),
-                  ];
-                },
-              ),
             ],
           ),
-          SliverToBoxAdapter(
-            child: CarouselSlider(
-              options: CarouselOptions(
-                enableInfiniteScroll: false,
-                height: heightExcludeAppbar * .25,
-                viewportFraction: 1,
-                autoPlay: true,
-                autoPlayCurve: Curves.ease,
-                onPageChanged: (index, reason) =>
-                    setState(() => _currentIndicatorDot = index.toDouble()),
-              ),
-              items: slideShows,
-            ),
-          ),
+          _sliverCarousel(heightExcludeAppbar, slideShows),
           SliverToBoxAdapter(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -92,37 +67,58 @@ class _HomeState extends State<Home> {
           ),
           Consumer(builder: (_, watch, child) {
             return watch(productsSnapshot).when(
-                loading: () => const SliverToBoxAdapter(child: Text("Loading")),
+                loading: () =>
+                    const SliverToBoxAdapter(child: Text(AppStrings.loading)),
                 error: (_, err) =>
-                    const SliverToBoxAdapter(child: Text("Loading")),
+                    const SliverToBoxAdapter(child: Text("Error")),
                 data: (data) {
-                  final products = data.docs;
-                  return SliverStaggeredGrid.countBuilder(
-                      itemCount: products.length,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 20,
-                      staggeredTileBuilder: (i) => const StaggeredTile.fit(1),
-                      crossAxisCount: 2,
-                      itemBuilder: (ctx, index) {
-                        final model = watch(productService)
-                            .parseMaptoModel(products[index]);
-                        return GestureDetector(
-                          onTap: () => Navigator.pushNamed(
-                              context, Routes.detailProduct,
-                              arguments: model),
-                          child: ProductContainer(
-                            imgPath: model.imagesLinks![1],
-                            title: model.title,
-                            price: model.price,
-                            discountPrice: model.discountPrice,
-                            rating: model.rating,
-                            hasAddedWishList: false,
-                          ),
-                        );
-                      });
+                  return _sliverStaggeredItems(data, watch);
                 });
           }),
         ],
+      ),
+    );
+  }
+
+  Widget _sliverStaggeredItems(data, watch) {
+    final products = data.docs;
+    return SliverStaggeredGrid.countBuilder(
+        itemCount: products.length,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 20,
+        staggeredTileBuilder: (i) => const StaggeredTile.fit(1),
+        crossAxisCount: 2,
+        itemBuilder: (ctx, index) {
+          final model = watch(productService).parseMaptoModel(products[index]);
+          return GestureDetector(
+            onTap: () => Navigator.pushNamed(context, Routes.detailProduct,
+                arguments: model),
+            child: ProductContainer(
+              imgPath: model.imagesLinks![1],
+              title: model.title,
+              price: model.price,
+              discountPrice: model.discountPrice,
+              rating: model.rating,
+              hasAddedWishList: false,
+            ),
+          );
+        });
+  }
+
+  SliverToBoxAdapter _sliverCarousel(
+      double heightExcludeAppbar, List<Stack> slideShows) {
+    return SliverToBoxAdapter(
+      child: CarouselSlider(
+        options: CarouselOptions(
+          enableInfiniteScroll: false,
+          height: heightExcludeAppbar * .25,
+          viewportFraction: 1,
+          autoPlay: true,
+          autoPlayCurve: Curves.ease,
+          onPageChanged: (index, reason) =>
+              setState(() => _currentIndicatorDot = index.toDouble()),
+        ),
+        items: slideShows,
       ),
     );
   }
@@ -152,11 +148,11 @@ class _HomeState extends State<Home> {
         duration: const Duration(milliseconds: 500),
         builder: (_, child, value) => DotsIndicator(
           decorator: DotsDecorator(
-            activeColor: Colors.red,
-            color: Colors.white,
-            activeSize: const Size(25, 8),
-            activeShape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            activeColor: kMedRed,
+            color: kWhiteColor,
+            activeSize: const Size(kValue25, kValue8),
+            activeShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(kValue10)),
           ),
           position: value,
           dotsCount: 3,
@@ -167,8 +163,10 @@ class _HomeState extends State<Home> {
 
   TextButton _buildCategoryButton(BuildContext context, String title) {
     return TextButton(
-        style: Theme.of(context).textButtonTheme.style?.copyWith(
-            foregroundColor: MaterialStateProperty.all(Colors.black54)),
+        style: Theme.of(context)
+            .textButtonTheme
+            .style
+            ?.copyWith(foregroundColor: MaterialStateProperty.all(kThemeColor)),
         onPressed: () {},
         child:
             Text(title, style: const TextStyle(fontWeight: FontWeight.w700)));

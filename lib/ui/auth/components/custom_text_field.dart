@@ -11,7 +11,7 @@ class CustomTextfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: const TextStyle(color: Colors.white),
+      style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kWhiteColor),
       textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(
           hintText: hintText, prefixIcon: prefix, isDense: true),

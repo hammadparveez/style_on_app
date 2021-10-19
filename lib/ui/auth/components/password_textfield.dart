@@ -9,7 +9,7 @@ class PasswordTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CustomTextfield(
-        prefix: Icon(FontAwesomeIcons.lock, color: Colors.white),
+        prefix: Icon(FontAwesomeIcons.lock, color: kWhiteColor),
         hintText: AppStrings.enterPassword);
   }
 }

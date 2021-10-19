@@ -2,6 +2,7 @@ class AppStrings {
   static const home = "Home";
   static const notifications = "Notifications";
   static const skip = "Skip";
+  static const loading = "Loading...";
   static const favorite= "Favorite";
   static const settings = "Settings";
   static const profile= "Profile";

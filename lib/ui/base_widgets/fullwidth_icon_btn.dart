@@ -18,7 +18,7 @@ class FullWidthIconButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             icon ?? const SizedBox(),
-            icon != null ? const SizedBox(width: 10) : const SizedBox(),
+            icon != null ? mediumHztSpacer: const SizedBox(),
             text,
           ],
         ),

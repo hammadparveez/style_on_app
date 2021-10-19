@@ -3,7 +3,7 @@ import 'package:style_on_app/exports.dart';
 
 class ProductContainer extends StatelessWidget {
   final String imgPath, price;
-  final double _bottomPaddingValue = 15;
+  //final double _bottomPaddingValue = 15;
   final imageRadius = BorderRadius.circular(8);
   final String title;
   final String? discountPrice;
@@ -23,13 +23,17 @@ class ProductContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
+      margin: const EdgeInsets.symmetric(horizontal: kPaddingSmall),
       decoration: BoxDecoration(
-        borderRadius: imageRadius,
-        color: Colors.white,
+        borderRadius:
+            imageRadius, // to give radius from bottom as well otherise ClipRRect works fine
+        color: kWhiteColor,
         boxShadow: const [
           BoxShadow(
-              color: Color(0xFFD4D4D4), blurRadius: 2, offset: Offset(0, 1)),
+            color: kLightGrey,
+            blurRadius: 2,
+            offset: Offset(0, 0),
+          ),
         ],
       ),
       child: ClipRRect(
@@ -47,22 +51,23 @@ class ProductContainer extends StatelessWidget {
 
   Padding _buildProductBrief(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(kPaddingDefault),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
             maxLines: 2,
-            style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                fontWeight: FontWeight.normal, fontSize: kfontSmallest13),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: kPaddingSmall),
             child: _buildPrices(),
           ),
           _buildRatingBar(),
-          const SizedBox(height: 5),
-          _buildCountry(context)
+          smallestVrtSpacer,
+          _buildCountry()
         ],
       ),
     );
@@ -71,12 +76,11 @@ class ProductContainer extends StatelessWidget {
   LayoutBuilder _buildProductImageStackedIcons() {
     return LayoutBuilder(builder: (context, constraints) {
       return SizedBox(
-        height: constraints.maxWidth + _bottomPaddingValue,
+        height: constraints.maxWidth + kPadding15,
         width: constraints.maxWidth,
         child: Stack(
           children: [
             _buildPositionedImage(),
-            //PositionedDirectional(top: 5, end: 8, child: Text("20%")),
             _buildHeartIconButton(context),
           ],
         ),
@@ -87,49 +91,52 @@ class ProductContainer extends StatelessWidget {
   Positioned _buildPositionedImage() {
     return Positioned.fill(
       child: Padding(
-        padding: EdgeInsets.only(bottom: _bottomPaddingValue),
-        child: ExtendedImage.network(
-          imgPath,
-        ),
-        // Image.asset(
-        //   imgPath,
-        //   fit: BoxFit.cover,
-        // ),
+        padding: const EdgeInsets.only(bottom: kPadding15),
+        child: ExtendedImage.network(imgPath),
       ),
     );
   }
 
-  Text _buildCountry(BuildContext context) {
+  Text _buildCountry() {
     return Text(
       "Pakistan",
-      style: Theme.of(context)
+      style: Theme.of(navigatorKey.currentContext!)
           .textTheme
           .subtitle2
-          ?.copyWith(fontSize: 11, color: Color(0xFF919191)),
+          ?.copyWith(fontWeight: FontWeight.normal),
     );
   }
 
-  Text _buildPrices() {
-    const discountStyle = TextStyle(color: Color(0xFFBBBBBB), fontSize: 11);
-    return Text.rich(
+  Widget _buildPrices() {
+    return FittedBox(
+      child: Text.rich(
         TextSpan(
           children: [
             TextSpan(text: "Rs: " + price),
-            const WidgetSpan(child: SizedBox(width: 5)),
+            const WidgetSpan(child: smallestHztSpacer),
             if (discountPrice != null && discountPrice!.isNotEmpty)
               TextSpan(
                 text: "Rs: ${discountPrice ?? '0'} ",
-                style: discountStyle.copyWith(
-                    decoration: TextDecoration.lineThrough,
-                    decorationThickness: 3),
+                style: Theme.of(navigatorKey.currentContext!)
+                    .textTheme
+                    .subtitle2
+                    ?.copyWith(
+                      fontWeight: FontWeight.normal,
+                      decoration: TextDecoration.lineThrough,
+                    ),
               ),
             TextSpan(
               text: " ${calcDiscount(price, discountPrice ?? '0').toInt()}%",
-              style: discountStyle,
+              style: Theme.of(navigatorKey.currentContext!).textTheme.subtitle2,
             ),
           ],
         ),
-        style: const TextStyle(color: Color(0xFFD4A347)));
+        style: Theme.of(navigatorKey.currentContext!)
+            .textTheme
+            .bodyText2
+            ?.copyWith(color: kLightYellow),
+      ),
+    );
   }
 
   Row _buildRatingBar() {
@@ -137,8 +144,8 @@ class ProductContainer extends StatelessWidget {
       children: [
         ...List.generate(
             rating,
-            (i) => Icon(CupertinoIcons.star_fill,
-                size: 14, color: Color(0xFFF7EA3B))),
+            (i) => const Icon(CupertinoIcons.star_fill,
+                size: 14, color: kLightestYellow)),
       ],
     );
   }
@@ -158,7 +165,7 @@ class ProductContainer extends StatelessWidget {
           child: InkWell(
             onTap: () {},
             child: Icon(CupertinoIcons.heart_circle_fill,
-                size: context.dp(18), color: Colors.white),
+                size: context.dp(18), color: kWhiteColor),
           ),
         ));
   }

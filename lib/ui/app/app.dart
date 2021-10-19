@@ -37,7 +37,9 @@ class App extends StatelessWidget {
           headline2: bigBTextStyle,
           headline3: bigBTextStyle.copyWith(fontSize: kfont25),
           bodyText1: defaultTextStyle,
+          bodyText2: medTextStyle,
           subtitle2: smallestBTextStyle.copyWith(
+            
               // height: 1.2,
               // overflow: TextOverflow.ellipsis,
               ),

@@ -10,7 +10,7 @@ class EmailCustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CustomTextfield(
-        prefix: Icon(FontAwesomeIcons.user, color: Colors.white),
+        prefix: Icon(FontAwesomeIcons.user, color: kWhiteColor),
         hintText: AppStrings.enterEmail);
   }
 }
