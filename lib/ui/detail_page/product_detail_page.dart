@@ -123,7 +123,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           color: Color(0xFF888888),
                           fontWeight: FontWeight.w600),
                     ),
-                    
                     collapsed: const SizedBox(),
                     expanded: Text(
                       "${widget.model.desc}",
@@ -146,7 +145,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ),
                 SizedBox(
-                  height: context.h(.3),
+                  height: context.h(.35),
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 6,

@@ -6,42 +6,49 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const styleOTitle = StyleOTitleWidget();
+    
+    final signUpText = Text(
+      AppStrings.signUpDesc,
+      style: Theme.of(context).textTheme.headline3,
+    );
+
+    final signInBtn = FullWidthIconButton(
+      onTap: () => Navigator.of(context).pushNamed(Routes.home),
+      text: const Text(AppStrings.signIn),
+    );
+
+    final signUpBtn = FullWidthIconButton(
+        onTap: () => Navigator.of(context).pushNamed(Routes.signUp),
+        icon: SvgPicture.asset(ImagePaths.emailISvgIcon, width: kValue25),
+        text: const Text(AppStrings.signInWithEmail));
+
+    final googleSignInBtn = FullWidthIconButton(
+        onTap: () {},
+        icon: SvgPicture.asset(ImagePaths.googleIcon, width: kValue25),
+        text: const Text(AppStrings.signInwithGoogle));
+
+    //Main View
     return ScaffoldWithImage(
       bgImgPath: ImagePaths.authMainImg,
       appBar: AuthAppBarWidget(
-        onSkipPress: () {
-          navigatorKey.currentState?.pushNamed(Routes.home);
-        },
+        onSkipPress: () => navigatorKey.currentState?.pushNamed(Routes.home),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const StyleOTitleWidget(),
-          Text(AppStrings.signUpDesc,
-              style: Theme.of(context).textTheme.headline3),
-          const SizedBox(height: 20),
+          styleOTitle,
+          signUpText,
+          largeVrtSpacer,
           Column(
             children: [
-              FractionallySizedBox(
-                widthFactor: 1,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.home);
-                  },
-                  child: Text("Sign In"),
-                ),
-              ),
-              const SizedBox(height: 10),
-              FullWidthIconButton(
-                  onTap: () => Navigator.of(context).pushNamed(Routes.signUp),
-                  icon: SvgPicture.asset(ImagePaths.emailISvgIcon, width: 25),
-                  text: const Text(AppStrings.signInWithEmail)),
-              const SizedBox(height: 10),
-              FullWidthIconButton(
-                  onTap: () {},
-                  icon: SvgPicture.asset(ImagePaths.googleIcon, width: 25),
-                  text: const Text(AppStrings.signInwithGoogle)),
+              mediumVrtSpacer,
+              signInBtn,
+              mediumVrtSpacer,
+              signUpBtn,
+              mediumVrtSpacer,
+              googleSignInBtn,
             ],
           ),
         ],

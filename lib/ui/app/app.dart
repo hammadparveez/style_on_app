@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:style_on_app/exports.dart';
 import "package:style_on_app/exports/ui_exports.dart";
+import 'package:style_on_app/utils/constants/style.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -31,28 +32,15 @@ class App extends StatelessWidget {
             ),
           ),
         ),
-        textTheme: const TextTheme(
-          headline1: TextStyle(
-            fontSize: 50,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-          headline2: TextStyle(
-            fontSize: 35,
-            color: Colors.white,
-          ),
-          headline3: TextStyle(
-            fontSize: 25,
-            color: Colors.white,
-          ),
-          bodyText1:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-          subtitle2: TextStyle(
-            height: 1.2,
-            overflow: TextOverflow.ellipsis,
-            fontSize: 13,
-            fontWeight: FontWeight.w400,
-          ),
+        textTheme: TextTheme(
+          headline1: biggestBTextStyle,
+          headline2: bigBTextStyle,
+          headline3: bigBTextStyle.copyWith(fontSize: kfont25),
+          bodyText1: defaultTextStyle,
+          subtitle2: smallestBTextStyle.copyWith(
+              // height: 1.2,
+              // overflow: TextOverflow.ellipsis,
+              ),
         ),
         textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(

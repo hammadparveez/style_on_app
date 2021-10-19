@@ -18,3 +18,4 @@ export "package:style_on_app/ui/auth/components/custom_text_field.dart";
 export "package:style_on_app/ui/auth/components/email_textfield.dart";
 export "package:style_on_app/ui/auth/components/auth_appbar.dart";
 export "package:style_on_app/ui/base_widgets/product_container.dart";
+export "package:style_on_app/ui/base_widgets/scrollable_with_size.dart";

@@ -7,12 +7,16 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Heading
+    const createAccountHeading = Flexible(
+      child: AuthWidgetTitleComponent(heading: AppStrings.createAccount),
+    );
+    //Main View
     return ScaffoldWithImage(
       bgImgPath: ImagePaths.bg,
       appBar: AuthAppBarWidget(
-        onSkipPress: () {
-          Navigator.of(context).pushReplacementNamed(Routes.home);
-        },
+        onSkipPress: () =>
+            Navigator.of(context).pushReplacementNamed(Routes.home),
       ),
       body: SingleChildScrollView(
         child: SizedBox(
@@ -22,45 +26,65 @@ class SignUp extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Flexible(
-                child:
-                    AuthWidgetTitleComponent(heading: AppStrings.createAccount),
-              ),
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    EmailCustomTextField(controller: TextEditingController()),
-                    const SizedBox(height: 10),
-                    PasswordTextField(controller: TextEditingController()),
-                    const SizedBox(height: 10),
-                    const CustomTextfield(
-                        prefix: Icon(FontAwesomeIcons.key, color: Colors.white),
-                        hintText: AppStrings.enterConfirmPass),
-                    const SizedBox(height: 20),
-                    FullWidthIconButton(
-                        text: const Text("Sign Up"), onTap: () {}),
-                    const SizedBox(height: 10),
-                    FullWidthIconButton(
-                        icon:
-                            SvgPicture.asset(ImagePaths.googleIcon, height: 25),
-                        text: const Text("Login With Google"),
-                        onTap: () {}),
-                    Center(
-                      child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed(Routes.signIn);
-                          },
-                          child: Text("Already have an account? Login In")),
-                    ),
-                  ],
-                ),
-              ),
+              createAccountHeading,
+              _buildFieldsAndBtns(),
             ],
           )),
         ),
       ),
     );
+  }
+
+  Widget _buildFieldsAndBtns() {
+    //Email Field
+    final emailField =
+        EmailCustomTextField(controller: TextEditingController());
+    //Password Field
+    final passwordField =
+        PasswordTextField(controller: TextEditingController());
+    //Confirm Pass Field
+    const confirmPassField = CustomTextfield(
+        prefix: Icon(FontAwesomeIcons.key, color: Colors.white),
+        hintText: AppStrings.enterConfirmPass);
+
+    return Expanded(
+      flex: 2,
+      child: Column(
+        children: [
+          emailField,
+          mediumVrtSpacer,
+          passwordField,
+          mediumVrtSpacer,
+          confirmPassField,
+          largeVrtSpacer,
+          _buildSignUpBtn(),
+          mediumVrtSpacer,
+          _buildGoogleBtn(),
+          _buildAlreadyHaveAccount(),
+        ],
+      ),
+    );
+  }
+
+  Center _buildAlreadyHaveAccount() {
+    return Center(
+      child: TextButton(
+        onPressed: () =>
+            navigatorKey.currentState?.pushReplacementNamed(Routes.signIn),
+        child: const Text(AppStrings.alreadyHaveAccount),
+      ),
+    );
+  }
+
+  FullWidthIconButton _buildGoogleBtn() {
+    return FullWidthIconButton(
+        icon: SvgPicture.asset(ImagePaths.googleIcon, height: 25),
+        text: const Text(AppStrings.signInwithGoogle),
+        onTap: () {});
+  }
+
+  FullWidthIconButton _buildSignUpBtn() {
+    return FullWidthIconButton(
+        text: const Text(AppStrings.signUp), onTap: () {});
   }
 }
