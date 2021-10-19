@@ -39,7 +39,7 @@ class App extends StatelessWidget {
           bodyText1: defaultTextStyle,
           bodyText2: medTextStyle,
           subtitle2: smallestBTextStyle.copyWith(
-            
+
               // height: 1.2,
               // overflow: TextOverflow.ellipsis,
               ),
@@ -61,6 +61,7 @@ class App extends StatelessWidget {
       navigatorKey: navigatorKey,
       onGenerateRoute: Routes.onGenerateRoute,
       initialRoute: Routes.onBoard,
+      
     );
   }
 }

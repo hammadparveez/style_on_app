@@ -1,7 +1,24 @@
+import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports.dart';
 
-class OnBoard extends StatelessWidget {
+class OnBoard extends StatefulWidget {
   const OnBoard({Key? key}) : super(key: key);
+
+  @override
+  State<OnBoard> createState() => _OnBoardState();
+}
+
+class _OnBoardState extends State<OnBoard> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      if (localService.hasOnBoardSeen()) {
+        Navigator.pushReplacementNamed(context, Routes.auth);
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +66,10 @@ class OnBoard extends StatelessWidget {
 
   ElevatedButton _buildAnimatedButton(BuildContext context) {
     return ElevatedButton(
-        onPressed: () => Navigator.of(context).pushNamed(Routes.auth),
+        onPressed: () {
+          localService.setOnBoardSeen();
+          Navigator.of(context).pushReplacementNamed(Routes.auth);
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

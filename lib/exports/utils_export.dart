@@ -3,3 +3,4 @@ export "package:style_on_app/utils/constants/app_strings.dart";
 export "package:style_on_app/utils/extensions/ext.dart";
 export "package:style_on_app/utils/helpers.dart";
 export "package:style_on_app/utils/constants/style.dart";
+export "package:style_on_app/utils/hive_boxes.dart";
