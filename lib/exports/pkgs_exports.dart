@@ -15,6 +15,8 @@ export "package:uuid/uuid.dart";
 export "package:extended_image/extended_image.dart";
 export "package:freezed_annotation/freezed_annotation.dart";
 export "package:hive_flutter/hive_flutter.dart";
+
+
 //Firebase
 export "package:firebase_auth/firebase_auth.dart";
 export "package:firebase_core/firebase_core.dart";

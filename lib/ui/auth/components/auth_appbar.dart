@@ -3,16 +3,21 @@ import 'package:style_on_app/exports.dart';
 class AuthAppBarWidget extends AppBar {
   final VoidCallback? onSkipPress;
   final VoidCallback? onBackPress;
+  final bool showBackPress;
   AuthAppBarWidget({
     Key? key,
     this.onSkipPress,
     this.onBackPress,
+    this.showBackPress = true,
   }) : super(
           key: key,
           backgroundColor: Colors.transparent,
-          leading: IconButton(
-              onPressed: () => onBackPress ?? navigatorKey.currentState?.pop(),
-              icon: const Icon(Icons.arrow_back_ios_new)),
+          leading: showBackPress
+              ? IconButton(
+                  onPressed: () =>
+                      onBackPress ?? navigatorKey.currentState?.pop(),
+                  icon: const Icon(Icons.arrow_back_ios_new))
+              : null,
           elevation: 0,
           actions: onSkipPress == null
               ? null

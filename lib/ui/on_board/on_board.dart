@@ -19,6 +19,10 @@ class _OnBoardState extends State<OnBoard> {
     });
   }
 
+  void _onExploreTap() {
+    localService.setOnBoardSeen();
+    Navigator.of(context).pushReplacementNamed(Routes.auth);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +70,7 @@ class _OnBoardState extends State<OnBoard> {
 
   ElevatedButton _buildAnimatedButton(BuildContext context) {
     return ElevatedButton(
-        onPressed: () {
-          localService.setOnBoardSeen();
-          Navigator.of(context).pushReplacementNamed(Routes.auth);
-        },
+        onPressed: _onExploreTap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

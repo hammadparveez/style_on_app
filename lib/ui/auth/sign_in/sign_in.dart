@@ -1,12 +1,58 @@
+import 'package:get/get.dart';
+import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
 import 'package:style_on_app/ui/auth/components/password_textfield.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
+  @override
+  State<SignIn> createState() => _SignInState();
+}
 
-  //Main View
+class _SignInState extends State<SignIn> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController emailController, passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+
+    context.read(authenticatePod).attachAuthStateListener(onLogIn: (user) {
+      Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
+    });
+  }
+
+  @override
+  dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
+
+  String? _emailValidator(String? email) {
+    if (email!.isEmpty) return "Enter an Email";
+    var isEmail = GetUtils.isEmail(email);
+    if (!isEmail) return "Enter a valid Email";
+  }
+
+  String? _passwordValidator(String? password) {
+    if (password!.isEmpty) return "Enter a password";
+  }
+
+  _onSignIn() async {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (isValid) {
+      await context
+          .read(authenticatePod)
+          .signIn(emailController.text, passwordController.text);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const heading = AuthWidgetTitleComponent(heading: AppStrings.signIn);
@@ -19,28 +65,30 @@ class SignIn extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           heading,
-          _buildSignInForm(),
+          Form(key: _formKey, child: _buildSignInForm()),
         ],
       )),
     );
   }
 
   Column _buildSignInForm() {
-    final signInBtn =
-        FullWidthIconButton(text: const Text(AppStrings.signIn), onTap: () {});
+    final signInBtn = FullWidthIconButton(
+        text: const Text(AppStrings.signIn), onTap: _onSignIn);
     final forgetPassBtn = TextButton(
       onPressed: () {},
       child: const Text(AppStrings.forgetPassword),
     );
     final signUpBtn = TextButton(
         onPressed: () {
-          navigatorKey.currentState!.pushReplacementNamed(Routes.signUp);
+          Navigator.of(context).pushReplacementNamed(Routes.signUp);
         },
         child: const Text(AppStrings.dontHaveAccount));
     return Column(
       children: [
-        EmailCustomTextField(controller: TextEditingController()),
-        PasswordTextField(controller: TextEditingController()),
+        EmailCustomTextField(
+            controller: emailController, onValidate: _emailValidator),
+        PasswordTextField(
+            controller: passwordController, onValidate: _passwordValidator),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [_buildCheckBoxField(), forgetPassBtn],

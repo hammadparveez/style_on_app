@@ -7,14 +7,14 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const styleOTitle = StyleOTitleWidget();
-    
+
     final signUpText = Text(
       AppStrings.signUpDesc,
       style: Theme.of(context).textTheme.headline3,
     );
 
     final signInBtn = FullWidthIconButton(
-      onTap: () => Navigator.of(context).pushNamed(Routes.home),
+      onTap: () => Navigator.of(context).pushNamed(Routes.signIn),
       text: const Text(AppStrings.signIn),
     );
 
@@ -32,6 +32,7 @@ class AuthScreen extends StatelessWidget {
     return ScaffoldWithImage(
       bgImgPath: ImagePaths.authMainImg,
       appBar: AuthAppBarWidget(
+        showBackPress: false,
         onSkipPress: () => navigatorKey.currentState?.pushNamed(Routes.home),
       ),
       body: Column(

@@ -44,6 +44,13 @@ class _HomeState extends State<Home> {
                   icon: const Icon(CupertinoIcons.search), onPressed: () {}),
               IconButton(
                   icon: const Icon(CupertinoIcons.bell), onPressed: () {}),
+              IconButton(
+                  icon: const Icon(Icons.logout_rounded),
+                  onPressed: () {
+                    context.read(authenticatePod).signOut();
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, Routes.auth, (route) => false);
+                  }),
             ],
           ),
           _sliverCarousel(heightExcludeAppbar, slideShows),

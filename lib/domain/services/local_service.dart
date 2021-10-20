@@ -9,6 +9,16 @@ class LocalService {
 
   final _box = Hive.box(appBoxName);
 
+  void setSessionID(String id) {
+    _box.put(sessionIDKey, id);
+  }
+
+  String? getSessionID() {
+    return  _box.get(sessionIDKey);
+  }
+  deleteSessionID() {
+    _box.delete(sessionIDKey);
+  }
   bool hasOnBoardSeen() {
     final hasSeen = _box.get(onBoardKey) ?? false;
     return hasSeen;

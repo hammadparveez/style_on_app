@@ -61,7 +61,6 @@ class App extends StatelessWidget {
       navigatorKey: navigatorKey,
       onGenerateRoute: Routes.onGenerateRoute,
       initialRoute: Routes.onBoard,
-      
     );
   }
 }
