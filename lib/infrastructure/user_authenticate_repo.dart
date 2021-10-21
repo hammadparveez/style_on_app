@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:style_on_app/domain/repository/auth/auth_repo.dart';
 import 'package:style_on_app/domain/repository/firebase_repo.dart';
@@ -8,9 +10,8 @@ import 'package:style_on_app/domain/shared/exceptions.dart';
 import 'package:style_on_app/exports/pkgs_exports.dart';
 import 'package:style_on_app/exports/ui_exports.dart';
 
-class UserAuthenticateRepoImpl extends AuthenticaitonRepo
-    implements ThirdPartyAuthRepo<ThirdPartAuthType> {
-  final BaseRepository _repository;
+class UserAuthenticateRepoImpl extends AuthenticaitonRepo {
+  final BaseRepository<UserCredential> _repository;
   UserAuthenticateRepoImpl(this._repository) : super(_repository);
 
   @override
@@ -65,15 +66,22 @@ class UserAuthenticateRepoImpl extends AuthenticaitonRepo
     switch (type) {
       case ThirdPartAuthType.google:
         var user = await GoogleSignIn().signIn();
-        
-        
+        log("User $user");
+        final googleAuth = await user?.authentication;
+        if (googleAuth != null) {
+          final credentials = GoogleAuthProvider.credential(
+              idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+          final user = await auth.signInWithCredential(credentials);
+          _repository.add(user);
+        }
+
         break;
       default:
     }
   }
 
   @override
-  void signOut() async {
+  Future<void> signOut() async {
     await auth.signOut();
   }
 

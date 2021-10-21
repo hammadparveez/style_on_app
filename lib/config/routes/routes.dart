@@ -4,6 +4,7 @@ import 'package:style_on_app/ui/detail_page/product_detail_page.dart';
 class Routes {
   static const onBoard = "onboard";
   static const home = "home";
+  static const main = "mainview";
   static const signIn = "signin";
   static const signUp = "signup";
   static const auth = "auth";
@@ -18,10 +19,10 @@ class Routes {
   static Route onGenerateRoute(RouteSettings settings) {
     return MaterialPageRoute(builder: (_) {
       switch (settings.name) {
-        case home:
+        case main:
           return MainScreen();
         case auth:
-          return const AuthScreen();
+          return  AuthScreen();
         case detailProduct:
           final model = (settings.arguments as ProductModel);
           return  ProductDetailPage(model:model);

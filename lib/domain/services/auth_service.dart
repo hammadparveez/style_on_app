@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:style_on_app/domain/repository/auth/auth_repo.dart';
@@ -7,13 +8,13 @@ import 'package:style_on_app/domain/shared/exceptions.dart';
 import 'package:style_on_app/exports/pkgs_exports.dart';
 import 'package:style_on_app/exports/ui_exports.dart';
 
-  enum ThirdPartAuthType {
-    google, facebook, github
-  }
-
+enum ThirdPartAuthType { google, facebook, github }
 
 class AuthService extends ChangeNotifier {
   final AuthenticaitonRepo _authRepo;
+  bool _isSignedIn = false;
+
+  bool get isSignedIn => _isSignedIn;
 
   AuthService(
     this._authRepo,
@@ -39,31 +40,23 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  signInBy(ThirdPartAuthType type) {
+  signInBy(ThirdPartAuthType type) async {
     switch (type) {
       case ThirdPartAuthType.google:
-        
+        await _authRepo.signInWith(ThirdPartAuthType.google);
         break;
       default:
     }
-
   }
 
-  attachAuthStateListener({Function(User)? onLogIn, VoidCallback? onLogOut}) {
-    FirebaseAuth.instance.authStateChanges().listen((user) {
-      if (user != null && onLogIn != null) {
-        log("Authentication State -> $user");
-        onLogIn(user);
-      }
-      if (onLogOut != null) {
-        log("Log Out Authentication State -> $user");
-        onLogOut();
-      }
-    });
+  StreamSubscription<User?> attachAuthStateListener(
+      {required Function(User?) listener}) {
+    return FirebaseAuth.instance.authStateChanges().listen(listener);
   }
 
-  signOut() {
-    _authRepo.signOut();
+
+  signOut() async {
+    await _authRepo.signOut();
     localService.deleteSessionID();
   }
 

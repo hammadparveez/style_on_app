@@ -1,3 +1,9 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:style_on_app/domain/services/auth_service.dart';
+import 'package:style_on_app/domain/services/riverpod/pods.dart';
+
 import 'package:style_on_app/exports.dart';
 
 //ImagePaths.authMainImg
@@ -24,16 +30,21 @@ class AuthScreen extends StatelessWidget {
         text: const Text(AppStrings.signInWithEmail));
 
     final googleSignInBtn = FullWidthIconButton(
-        onTap: () {},
+        onTap: () async {
+          await context
+              .read(authenticatePod)
+              .signInBy(ThirdPartAuthType.google);
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(Routes.main, (route) => false);
+        },
         icon: SvgPicture.asset(ImagePaths.googleIcon, width: kValue25),
         text: const Text(AppStrings.signInwithGoogle));
 
-    //Main View
     return ScaffoldWithImage(
       bgImgPath: ImagePaths.authMainImg,
       appBar: AuthAppBarWidget(
         showBackPress: false,
-        onSkipPress: () => navigatorKey.currentState?.pushNamed(Routes.home),
+        //onSkipPress: () => navigatorKey.currentState?.pushNamed(Routes.main),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -55,5 +66,7 @@ class AuthScreen extends StatelessWidget {
         ],
       ),
     );
+
+    //Main View
   }
 }

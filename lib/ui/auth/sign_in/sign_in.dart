@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports.dart';
@@ -20,10 +22,6 @@ class _SignInState extends State<SignIn> {
     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
-
-    context.read(authenticatePod).attachAuthStateListener(onLogIn: (user) {
-      Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
-    });
   }
 
   @override
@@ -50,6 +48,8 @@ class _SignInState extends State<SignIn> {
       await context
           .read(authenticatePod)
           .signIn(emailController.text, passwordController.text);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(Routes.main, (route) => false);
     }
   }
 

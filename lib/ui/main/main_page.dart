@@ -1,4 +1,5 @@
 import 'package:flutter/gestures.dart';
+import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports.dart';
 
 class MainScreen extends StatefulWidget {
@@ -27,10 +28,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    var body = Scaffold(
       bottomNavigationBar: _buildBottomNavigation(),
       body: PageView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: (changedIndex) =>
             setState(() => selectedIndex = changedIndex),
@@ -38,6 +39,16 @@ class _MainScreenState extends State<MainScreen> {
         itemBuilder: (ctx, index) => pages[index],
       ),
     );
+
+      return  Consumer(builder: (context, watch, child) {
+      final authNotifier = watch(authStateNotifyPod);
+    return authNotifier.when(
+      error: (_, __) => child!,
+      loading: () => child!,
+      data: (data) => data != null ? child! : const AuthScreen(),
+    );
+    },
+    child: body,);
   }
 
   SalomonBottomBar _buildBottomNavigation() {

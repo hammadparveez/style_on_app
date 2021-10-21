@@ -14,7 +14,7 @@ class _OnBoardState extends State<OnBoard> {
     super.initState();
     Future.microtask(() {
       if (localService.hasOnBoardSeen()) {
-        Navigator.pushReplacementNamed(context, Routes.auth);
+        Navigator.pushReplacementNamed(context, Routes.main);
       }
     });
   }

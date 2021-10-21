@@ -14,8 +14,8 @@ final authenticatePod = ChangeNotifierProvider((ref) {
   );
 });
 
-final authStateTrack =
-    StreamProvider((ref) => FirebaseAuth.instance.authStateChanges());
+final authStateNotifyPod = StreamProvider.autoDispose(
+    (ref) => FirebaseAuth.instance.authStateChanges());
 
 //Local Global Serivce
 final localService = LocalService();

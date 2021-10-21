@@ -46,10 +46,10 @@ class _HomeState extends State<Home> {
                   icon: const Icon(CupertinoIcons.bell), onPressed: () {}),
               IconButton(
                   icon: const Icon(Icons.logout_rounded),
-                  onPressed: () {
-                    context.read(authenticatePod).signOut();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, Routes.auth, (route) => false);
+                  onPressed: () async {
+                    await context.read(authenticatePod).signOut();
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil(Routes.auth, (route) => false);
                   }),
             ],
           ),

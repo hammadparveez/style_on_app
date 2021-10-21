@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:style_on_app/domain/services/auth_service.dart';
 import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/ui/auth/components/password_textfield.dart';
@@ -26,9 +27,6 @@ class _SignUpState extends State<SignUp> {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     confirmPassController = TextEditingController();
-    context.read(authenticatePod).attachAuthStateListener(onLogIn: (user) {
-      Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
-    });
   }
 
   @override
@@ -58,12 +56,20 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
+  _onGoogleSignIn() async {
+    await context.read(authenticatePod).signInBy(ThirdPartAuthType.google);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(Routes.main, (route) => false);
+  }
+
   _onSignUp() async {
     var isValidated = _formKey.currentState?.validate() ?? false;
     if (isValidated) {
       await context
           .read(authenticatePod)
           .createAccount(emailController.text, passwordController.text);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(Routes.main, (route) => false);
     }
   }
 
@@ -143,7 +149,7 @@ class _SignUpState extends State<SignUp> {
     return FullWidthIconButton(
         icon: SvgPicture.asset(ImagePaths.googleIcon, height: 25),
         text: const Text(AppStrings.signInwithGoogle),
-        onTap: () {});
+        onTap: _onGoogleSignIn);
   }
 
   FullWidthIconButton _buildSignUpBtn(BuildContext ctx) {
