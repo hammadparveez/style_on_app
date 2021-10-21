@@ -58,8 +58,7 @@ class _SignUpState extends State<SignUp> {
 
   _onGoogleSignIn() async {
     await context.read(authenticatePod).signInBy(ThirdPartAuthType.google);
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(Routes.main, (route) => false);
+    routeReplaceAndRemove(Routes.main);
   }
 
   _onSignUp() async {
@@ -68,8 +67,7 @@ class _SignUpState extends State<SignUp> {
       await context
           .read(authenticatePod)
           .createAccount(emailController.text, passwordController.text);
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(Routes.main, (route) => false);
+      routeReplaceAndRemove(Routes.main);
     }
   }
 
@@ -138,8 +136,7 @@ class _SignUpState extends State<SignUp> {
   Center _buildAlreadyHaveAccount() {
     return Center(
       child: TextButton(
-        onPressed: () =>
-            navigatorKey.currentState?.pushReplacementNamed(Routes.signIn),
+        onPressed: () => routeReplace(Routes.signIn),
         child: const Text(AppStrings.alreadyHaveAccount),
       ),
     );

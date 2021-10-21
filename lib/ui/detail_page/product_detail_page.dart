@@ -26,6 +26,35 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
+  Widget _cartIconWithBadge(IconData icon, int value, [VoidCallback? onTap]) {
+    assert(value >= 0);
+    return Padding(
+      padding: const EdgeInsets.only(right: kPaddingSmall),
+      child: Stack(
+        children: [
+          IconButton(
+            icon: Icon(icon),
+            onPressed: onTap,
+          ),
+          Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: kThemeColor),
+                child: Text(value > 99 ? "99+" : "$value",
+                    style: TextStyle(
+                      color: kWhiteColor,
+                      fontSize: kfontSmallest11,
+                      fontWeight: FontWeight.w600,
+                    )),
+              )),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +64,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         actions: [
           IconButton(icon: const Icon(CupertinoIcons.search), onPressed: () {}),
           IconButton(icon: const Icon(CupertinoIcons.bell), onPressed: () {}),
+          _cartIconWithBadge(CupertinoIcons.bag, 5, () {}),
         ],
       ),
       body: SingleChildScrollView(
@@ -152,9 +182,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.cart), label: "Buy Now"),
+              icon: Icon(CupertinoIcons.shopping_cart), label: "Add to Cart"),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.heart), label: "Add to Wishlist"),
+              icon: Icon(Icons.local_shipping_outlined), label: "Buy Now"),
         ],
       ),
     );

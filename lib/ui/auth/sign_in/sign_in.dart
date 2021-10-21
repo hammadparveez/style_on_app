@@ -48,8 +48,7 @@ class _SignInState extends State<SignIn> {
       await context
           .read(authenticatePod)
           .signIn(emailController.text, passwordController.text);
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(Routes.main, (route) => false);
+      routeReplaceAndRemove(Routes.main);
     }
   }
 
@@ -79,9 +78,7 @@ class _SignInState extends State<SignIn> {
       child: const Text(AppStrings.forgetPassword),
     );
     final signUpBtn = TextButton(
-        onPressed: () {
-          Navigator.of(context).pushReplacementNamed(Routes.signUp);
-        },
+        onPressed: () => routeReplace(Routes.signUp),
         child: const Text(AppStrings.dontHaveAccount));
     return Column(
       children: [

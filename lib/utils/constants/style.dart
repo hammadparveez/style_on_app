@@ -2,6 +2,7 @@ import 'package:style_on_app/exports.dart';
 
 //font sizes
 const double kfontSmallest = 12.5;
+const double kfontSmallest11 = 11;
 const double kfontSmallest13 = 13;
 const double kfont14 = 14;
 const double kfont16 = 16;

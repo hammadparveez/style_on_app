@@ -34,8 +34,7 @@ class AuthScreen extends StatelessWidget {
           await context
               .read(authenticatePod)
               .signInBy(ThirdPartAuthType.google);
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(Routes.main, (route) => false);
+          routeReplaceAndRemove(Routes.main);
         },
         icon: SvgPicture.asset(ImagePaths.googleIcon, width: kValue25),
         text: const Text(AppStrings.signInwithGoogle));
