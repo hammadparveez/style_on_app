@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:style_on_app/exports.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -15,9 +18,12 @@ class _ProductDetailPageState extends State<ProductDetailPage>
   late ExpandableController _expandableController;
   late Widget swtichedWidget;
   late Animation<Offset> _offsetAnimation;
+  late CustomAnimationControl _optionAnimController;
+  int selectedIndex = 0, sizeSelectedIndex = 0;
   @override
   void initState() {
     super.initState();
+    _optionAnimController = CustomAnimationControl.stop;
     _expandableController = ExpandableController()..expanded = true;
     _offsetAnimation = Tween<Offset>(begin: Offset(0, 0), end: Offset(50, 0))
         .animate(createController());
@@ -124,6 +130,60 @@ class _ProductDetailPageState extends State<ProductDetailPage>
                         color: Colors.yellow, size: 20)),
               ),
               smallestVrtSpacer,
+              //Option Selector
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  widget.model.options?.color == null
+                      ? const SizedBox()
+                      : _buildColorChooser(),
+                  widget.model.options?.size == null
+                      ? const SizedBox()
+                      : Flexible(
+                          child: Wrap(
+                          children: [
+                            for (int i = 0;
+                                i < widget.model.options!.size!.length;
+                                i++)
+                              GestureDetector(
+                                onTap: () {
+                                  sizeSelectedIndex = i;
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  height: 25 *
+                                      MediaQuery.textScaleFactorOf(context),
+                                  width: 25 *
+                                      MediaQuery.textScaleFactorOf(context),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: kPaddingSmall),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: kThemeColor,
+                                    border: sizeSelectedIndex == i
+                                        ? Border.all(width: 2, color: kLightRed)
+                                        : null,
+                                  ),
+                                  child: Text(
+                                    (widget.model.options!.size![i] as String)
+                                        .toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2
+                                        ?.copyWith(
+                                          //fontSize: kfontSmallest,
+                                          fontWeight: FontWeight.bold,
+                                          color: kWhiteColor,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        )),
+                ],
+              ),
+              //-/Option Selector
               const Divider(),
               ExpandablePanel(
                   controller: _expandableController,
@@ -204,7 +264,44 @@ class _ProductDetailPageState extends State<ProductDetailPage>
     );
   }
 
+  Flexible _buildColorChooser() {
+    return Flexible(
+      child: Wrap(children: [
+        for (int index = 0;
+            index < widget.model.options!.color!.length;
+            index++)
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedIndex = index;
+                _optionAnimController = CustomAnimationControl.playFromStart;
+              });
+            },
+            child: CustomAnimation<double>(
+                control: _optionAnimController,
+                tween: Tween(begin: 0, end: 2.5),
+                duration: const Duration(milliseconds: 250),
+                builder: (context, child, value) {
+                  return Container(
+                    height: 25 * MediaQuery.textScaleFactorOf(context),
+                    width: 25 * MediaQuery.textScaleFactorOf(context),
+                    margin: EdgeInsets.symmetric(horizontal: kPaddingSmall),
+                    decoration: BoxDecoration(
+                      border: selectedIndex == index
+                          ? Border.all(color: kThemeColor, width: value)
+                          : null,
+                      color: HexColor(widget.model.options!.color![index]),
+                      shape: BoxShape.circle,
+                    ),
+                  );
+                }),
+          ),
+      ]),
+    );
+  }
+
   Widget _addToCartButton() {
+    jsonEncode({});
     return FullWidthIconButton(
       onTap: () {
         setState(() {
