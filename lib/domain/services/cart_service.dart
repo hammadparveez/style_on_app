@@ -7,10 +7,12 @@ import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports/ui_exports.dart';
 
 class CartService extends ChangeNotifier {
-  final BagRepository _cartRepository;
-  LocalCartSerivce _localCartSerivce = LocalCartSerivce();
-  List<BagModel> items = [];
   CartService(BagRepository repo) : _cartRepository = repo;
+
+  final BagRepository _cartRepository;
+  final LocalCartSerivce _localCartSerivce = LocalCartSerivce();
+  List<BagModel> items = [];
+
   addToCart(BagModel model) async {
     await _localCartSerivce.storeCart(model.toJson());
     items.add(model);

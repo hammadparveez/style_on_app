@@ -7,6 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:style_on_app/domain/model/bag_model.dart';
 import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports.dart';
+import 'package:style_on_app/ui/base_widgets/default_appbar.dart';
 
 class ProductDetailPage extends StatefulWidget {
   ProductDetailPage({Key? key, required this.model}) : super(key: key);
@@ -42,14 +43,12 @@ class _ProductDetailPageState extends State<ProductDetailPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.white,
-        actions: [
-          IconButton(icon: const Icon(CupertinoIcons.search), onPressed: () {}),
-          IconButton(icon: const Icon(CupertinoIcons.bell), onPressed: () {}),
-          _cartIconWithBadge(CupertinoIcons.bag, 5, () {}),
-        ],
+      appBar: DefaultAppBar(
+        firstIcon: CupertinoIcons.search,
+        secondIcon: CupertinoIcons.bell,
+        onFirstTap: () {},
+        onSecondTap: () {},
+        onThirdTap: () {},
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -78,40 +77,6 @@ class _ProductDetailPageState extends State<ProductDetailPage>
         ),
       ),
       bottomNavigationBar: _buildAnimatedSwitcher(),
-    );
-  }
-
-  Widget _cartIconWithBadge(IconData icon, int value, [VoidCallback? onTap]) {
-    assert(value >= 0); //Only for debuging
-    return Padding(
-      padding: const EdgeInsets.only(right: kPaddingSmall),
-      child: Stack(
-        children: [
-          IconButton(
-            icon: Icon(icon),
-            onPressed: onTap,
-          ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: kThemeColor),
-              child: Consumer(builder: (context, watch, child) {
-                var itemsLength = watch(cartService).items.length;
-                var itemCount = itemsLength > 99 ? "99+" : itemsLength;
-                return Text("$itemCount",
-                    style: TextStyle(
-                      color: kWhiteColor,
-                      fontSize: kfontSmallest11,
-                      fontWeight: FontWeight.w600,
-                    ));
-              }),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -361,9 +326,6 @@ class _ProductDetailPageState extends State<ProductDetailPage>
         ));
   }
 }
-
-
-
 
 
 
