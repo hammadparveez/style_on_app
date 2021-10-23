@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:math' as math;
-import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:style_on_app/exports.dart';
 import "package:path/path.dart" as path;
 import 'package:style_on_app/exports/pkgs_exports.dart';

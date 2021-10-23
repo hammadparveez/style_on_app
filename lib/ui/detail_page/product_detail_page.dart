@@ -10,12 +10,18 @@ class ProductDetailPage extends StatefulWidget {
   State<ProductDetailPage> createState() => _ProductDetailPageState();
 }
 
-class _ProductDetailPageState extends State<ProductDetailPage> {
+class _ProductDetailPageState extends State<ProductDetailPage>
+    with AnimationMixin {
   late ExpandableController _expandableController;
+  late Widget swtichedWidget;
+  late Animation<Offset> _offsetAnimation;
   @override
   void initState() {
     super.initState();
     _expandableController = ExpandableController()..expanded = true;
+    _offsetAnimation = Tween<Offset>(begin: Offset(0, 0), end: Offset(50, 0))
+        .animate(createController());
+    swtichedWidget = _buildBottomNavigation();
   }
 
   @override
@@ -179,14 +185,49 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.shopping_cart), label: "Add to Cart"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.local_shipping_outlined), label: "Buy Now"),
-        ],
+      bottomNavigationBar: AnimatedSwitcher(
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          debugPrint("Animation ${animation.value}");
+          final offsetAnimation =
+              Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
+                  .animate(animation);
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+        switchInCurve: Curves.decelerate,
+        switchOutCurve: Curves.decelerate,
+        duration: const Duration(milliseconds: 500),
+        child: swtichedWidget,
       ),
+    );
+  }
+
+  Widget _addToCartButton() {
+    return FullWidthIconButton(
+      onTap: () {
+        setState(() {
+          swtichedWidget = _buildBottomNavigation();
+        });
+      },
+      text: const Text(AppStrings.buyNow),
+    );
+  }
+
+  BottomNavigationBar _buildBottomNavigation() {
+    return BottomNavigationBar(
+      onTap: (index) {
+        debugPrint("Index $index");
+        swtichedWidget = _addToCartButton();
+        setState(() {});
+      },
+      items: const [
+        BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.shopping_cart), label: "Add to Cart"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.local_shipping_outlined), label: "Buy Now"),
+      ],
     );
   }
 
