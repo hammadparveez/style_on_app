@@ -48,7 +48,9 @@ class _ProductDetailPageState extends State<ProductDetailPage>
         secondIcon: CupertinoIcons.bell,
         onFirstTap: () {},
         onSecondTap: () {},
-        onThirdTap: () {},
+        onThirdTap: () {
+          Navigator.pushNamed(context, Routes.cart);
+        },
       ),
       body: SingleChildScrollView(
         child: Padding(

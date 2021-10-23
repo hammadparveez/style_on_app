@@ -23,13 +23,17 @@ class CartService extends ChangeNotifier {
   fetchAllCart() async {
     final _localItems = _localCartSerivce.getAllCartItems();
     items = _localItems.map((item) => BagModel.fromJson(item)).toList();
-    await Future.delayed(Duration(seconds: 2));
-
+    await Future.delayed(Duration(seconds: 1));
     // items = await _cartRepository.fetchAllItems();
     notifyListeners();
+    return items;
   }
 
-  deleteCart(String productID) {}
+  deleteCart(int index) {
+    _localCartSerivce.deleteItem(index);
+    items.removeAt(index );
+    notifyListeners();
+  }
 
   deleteAllCarts() {
     _localCartSerivce.clearCart();

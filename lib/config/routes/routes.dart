@@ -1,4 +1,5 @@
 import 'package:style_on_app/exports.dart';
+import 'package:style_on_app/ui/cart/cart_screen.dart';
 import 'package:style_on_app/ui/detail_page/product_detail_page.dart';
 
 class Routes {
@@ -20,12 +21,14 @@ class Routes {
     return MaterialPageRoute(builder: (_) {
       switch (settings.name) {
         case main:
-          return MainScreen();
+          return const MainScreen();
         case auth:
-          return  AuthScreen();
+          return const AuthScreen();
         case detailProduct:
           final model = (settings.arguments as ProductModel);
-          return  ProductDetailPage(model:model);
+          return ProductDetailPage(model: model);
+        case cart:
+          return const CartScreen();
         case signUp:
           return const SignUp();
         case signIn:

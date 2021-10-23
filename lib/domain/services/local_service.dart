@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:style_on_app/exports/pkgs_exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
 
@@ -39,6 +41,13 @@ class LocalCartSerivce {
 
   List<dynamic> getAllCartItems() {
     return _box.values.toList();
+  }
+
+  deleteItem(int key) {
+    final item = _box.getAt(key);
+    if (item != null) {
+      _box.deleteAt(key);
+    }
   }
 
   clearCart() {
