@@ -5,6 +5,7 @@ const passworkWeakMsg = "Please enter a strong password";
 const invalidPasswordMsg = "Please enter a correct Password";
 const somethingWentWrongMsg = "Something went wrong";
 const disabledUserMsg = "Your access is restricted";
+const userIsNotLoggedInMSg = "You are not Signed In";
 const requireLoginMsg = "You have to Sign In in order to delete an account";
 
 class BaseException implements Exception {

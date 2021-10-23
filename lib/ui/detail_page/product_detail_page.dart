@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:style_on_app/domain/model/bag_model.dart';
+import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -22,6 +25,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>
   @override
   void initState() {
     super.initState();
+    context.read(cartService).fetchAllCart();
     _optionAnimController = CustomAnimationControl.stop;
     _expandableController = ExpandableController()..expanded = true;
     swtichedWidget = _buildBottomNavigation();
@@ -78,7 +82,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>
   }
 
   Widget _cartIconWithBadge(IconData icon, int value, [VoidCallback? onTap]) {
-    assert(value >= 0);
+    assert(value >= 0); //Only for debuging
     return Padding(
       padding: const EdgeInsets.only(right: kPaddingSmall),
       child: Stack(
@@ -88,19 +92,24 @@ class _ProductDetailPageState extends State<ProductDetailPage>
             onPressed: onTap,
           ),
           Positioned(
-              top: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: kThemeColor),
-                child: Text(value > 99 ? "99+" : "$value",
+            top: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: kThemeColor),
+              child: Consumer(builder: (context, watch, child) {
+                var itemsLength = watch(cartService).items.length;
+                var itemCount = itemsLength > 99 ? "99+" : itemsLength;
+                return Text("$itemCount",
                     style: TextStyle(
                       color: kWhiteColor,
                       fontSize: kfontSmallest11,
                       fontWeight: FontWeight.w600,
-                    )),
-              )),
+                    ));
+              }),
+            ),
+          ),
         ],
       ),
     );
@@ -199,8 +208,9 @@ class _ProductDetailPageState extends State<ProductDetailPage>
           for (int i = 0; i < widget.model.options!.size!.length; i++)
             GestureDetector(
               onTap: () {
-                sizeSelectedIndex = i;
-                setState(() {});
+                setState(() {
+                  sizeSelectedIndex = i;
+                });
               },
               child: Container(
                 height: 30 * MediaQuery.textScaleFactorOf(context),
@@ -301,16 +311,30 @@ class _ProductDetailPageState extends State<ProductDetailPage>
 
   BottomNavigationBar _buildBottomNavigation() {
     return BottomNavigationBar(
-      onTap: (index) {
-        debugPrint("Index $index");
+      onTap: (index) async {
+        var model = widget.model;
+        var color = model.options?.color?[colorSelectedIndex];
+        var size = model.options?.size?[sizeSelectedIndex];
+
+        await context.read(cartService).addToCart(
+              BagModel(
+                productThumbnail: model.imagesLinks![0],
+                productTitle: model.title,
+                option: [color, size],
+                productPrice: double.tryParse(model.price) ?? 0,
+              ),
+            );
+
         swtichedWidget = _addToCartButton();
         setState(() {});
       },
       items: const [
         BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.shopping_cart), label: "Add to Cart"),
+            icon: Icon(CupertinoIcons.shopping_cart),
+            label: AppStrings.addToCart),
         BottomNavigationBarItem(
-            icon: Icon(Icons.local_shipping_outlined), label: "Buy Now"),
+            icon: Icon(Icons.local_shipping_outlined),
+            label: AppStrings.addToWishlist),
       ],
     );
   }

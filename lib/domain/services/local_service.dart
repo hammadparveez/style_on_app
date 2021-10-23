@@ -14,11 +14,13 @@ class LocalService {
   }
 
   String? getSessionID() {
-    return  _box.get(sessionIDKey);
+    return _box.get(sessionIDKey);
   }
+
   deleteSessionID() {
     _box.delete(sessionIDKey);
   }
+
   bool hasOnBoardSeen() {
     final hasSeen = _box.get(onBoardKey) ?? false;
     return hasSeen;
@@ -26,5 +28,20 @@ class LocalService {
 
   void setOnBoardSeen() {
     _box.put(onBoardKey, true);
+  }
+}
+
+class LocalCartSerivce {
+  final _box = Hive.box(cartBoxName);
+  storeCart(String json) async {
+    await _box.add(json);
+  }
+
+  List<dynamic> getAllCartItems() {
+    return _box.values.toList();
+  }
+
+  clearCart() {
+    _box.clear();
   }
 }
