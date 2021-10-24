@@ -4,7 +4,7 @@ import 'package:style_on_app/domain/model/product/product_model.dart';
 abstract class BagRepository {
   addItem(BagModel model);
   deleteItem(String productID);
-  updateItem(String productID);
+  updateItem(BagModel model);
   deleteAll();
   
   Future<List<BagModel>> fetchAllItems();

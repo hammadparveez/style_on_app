@@ -25,3 +25,8 @@ class NetworkException extends BaseException {
 class UnkownException extends BaseException {
   UnkownException(String msg) : super(msg);
 }
+
+
+class LocalStorageException extends BaseException {
+  LocalStorageException(String msg) : super(msg);
+}

@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:style_on_app/exports/pkgs_exports.dart';
 
 class BagModel {
+  String cartId;
   String productThumbnail;
   String productTitle;
   List<dynamic> option;
@@ -14,10 +16,10 @@ class BagModel {
     required this.option,
     required this.productPrice,
     this.qty = 1,
-  });
- 
+  }) : cartId = const Uuid().v4().toString();
 
   BagModel copyWith({
+    BigInt? cartId,
     String? productThumbnail,
     String? productTitle,
     List<dynamic>? option,
@@ -35,6 +37,7 @@ class BagModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'cartId': cartId,
       'productThumbnail': productThumbnail,
       'productTitle': productTitle,
       'option': option,
@@ -50,36 +53,39 @@ class BagModel {
       option: List<dynamic>.from(map['option']),
       productPrice: map['productPrice'],
       qty: map['qty'],
-    );
+    )..cartId = map['cartId'];
   }
 
   String toJson() => json.encode(toMap());
 
-  factory BagModel.fromJson(String source) => BagModel.fromMap(json.decode(source));
+  factory BagModel.fromJson(String source) =>
+      BagModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'BagModel(productThumbnail: $productThumbnail, productTitle: $productTitle, option: $option, productPrice: $productPrice, qty: $qty)';
+    return 'BagModel(cartId: $cartId, productThumbnail: $productThumbnail, productTitle: $productTitle, option: $option, productPrice: $productPrice, qty: $qty)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is BagModel &&
-      other.productThumbnail == productThumbnail &&
-      other.productTitle == productTitle &&
-      listEquals(other.option, option) &&
-      other.productPrice == productPrice &&
-      other.qty == qty;
+        other.cartId == cartId &&
+        other.productThumbnail == productThumbnail &&
+        other.productTitle == productTitle &&
+        listEquals(other.option, option) &&
+        other.productPrice == productPrice &&
+        other.qty == qty;
   }
 
   @override
   int get hashCode {
-    return productThumbnail.hashCode ^
-      productTitle.hashCode ^
-      option.hashCode ^
-      productPrice.hashCode ^
-      qty.hashCode;
+    return cartId.hashCode ^
+        productThumbnail.hashCode ^
+        productTitle.hashCode ^
+        option.hashCode ^
+        productPrice.hashCode ^
+        qty.hashCode;
   }
 }

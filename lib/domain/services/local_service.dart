@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:style_on_app/domain/model/bag_model.dart';
+import 'package:style_on_app/domain/shared/exceptions.dart';
 import 'package:style_on_app/exports/pkgs_exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
 
@@ -47,6 +49,14 @@ class LocalCartSerivce {
     final item = _box.getAt(key);
     if (item != null) {
       _box.deleteAt(key);
+    }
+  }
+
+  updateItem(int index, BagModel model) async {
+    try {
+      await _box.putAt(index, model.toJson());
+    } catch (e) {
+      throw LocalStorageException("Item does not exists");
     }
   }
 

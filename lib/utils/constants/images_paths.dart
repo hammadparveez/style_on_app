@@ -21,5 +21,7 @@ class ImagePaths {
 
   //SVGS
   static const googleIcon = "assets/images/google.svg";
+  static const loader = "assets/images/svg_loader.svg";
+  static const loaderGif = "assets/images/loader.gif";
   static const emailISvgIcon = "assets/images/email_icon.svg";
 }

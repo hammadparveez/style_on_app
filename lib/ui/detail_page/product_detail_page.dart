@@ -26,7 +26,9 @@ class _ProductDetailPageState extends State<ProductDetailPage>
   @override
   void initState() {
     super.initState();
-    context.read(cartService).fetchAllCart();
+    Future.microtask(() {
+      context.read(cartService).fetchAllCart();
+    });
     _optionAnimController = CustomAnimationControl.stop;
     _expandableController = ExpandableController()..expanded = true;
     swtichedWidget = _buildBottomNavigation();
@@ -285,6 +287,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>
 
         await context.read(cartService).addToCart(
               BagModel(
+                
                 productThumbnail: model.imagesLinks![0],
                 productTitle: model.title,
                 option: [color, size],

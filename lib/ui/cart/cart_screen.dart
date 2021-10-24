@@ -24,7 +24,9 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    context.read(cartService).fetchAllCart();
+    Future.microtask(() {
+      context.read(cartService).fetchAllCart();
+    });
   }
 
   _deleteItem(BagModel model, int index) async {
@@ -42,8 +44,11 @@ class _CartScreenState extends State<CartScreen> {
           //show WishList Icon and Replace Rout with WishList
           //Navigator.pop(context)
         },
-        replaceCartWidget:
-            IconButton(icon: Icon(CupertinoIcons.heart), onPressed: () {}),
+        replaceCartWidget: IconButton(
+            icon: Icon(CupertinoIcons.heart),
+            onPressed: () {
+              context.read(cartService).deleteAllCarts();
+            }),
         firstIcon: CupertinoIcons.bell,
         onFirstTap: () {},
       ),
@@ -51,8 +56,19 @@ class _CartScreenState extends State<CartScreen> {
         padding: const EdgeInsets.all(kPadding10),
         child: CustomScrollView(
           slivers: [
+            const SliverToBoxAdapter(),
             Consumer(builder: (context, watch, value) {
               var _list = watch(cartService).items;
+              if (watch(cartService).status == LoadingStatus.loading) {
+                return _buildLoaderIndicator();
+              } else if (watch(cartService).items.isEmpty) {
+                return SliverFillRemaining(
+                    child: Center(
+                  child: Text("Oops! Nothing found in cart",
+                      textScaleFactor: 1.5,
+                      style: Theme.of(context).textTheme.bodyText1),
+                ));
+              }
 
               return SliverAnimatedList(
                 key: animatedKey,
@@ -80,13 +96,106 @@ class _CartScreenState extends State<CartScreen> {
                 }),
               ],
             ),
-            FullWidthIconButton(
-                buttonColor: kThemeColor,
-                text: Text("Checkout Immediately"),
-                onTap: () {}),
+            LayoutBuilder(builder: (context, constriants) {
+              // log("Constriants $constriants");
+              return SizedBox(
+                width: constriants.maxWidth,
+                child: CustomElevatedButton(
+                    buttonColor: kThemeColor,
+                    text: Consumer(
+                      builder: (context, watch, child) {
+                        final addToCartWidth =
+                            _textSize("Add something to cart").width;
+                        final checkOutWidth =
+                            _textSize("Checkout Immediately").width;
+                        final halfWidth =
+                            (constriants.maxWidth - addToCartWidth) / 2.5;
+                        final checkOutHalfWidth =
+                            (constriants.maxWidth - checkOutWidth) / 2.5;
+                        if (watch(cartService).items.isEmpty) {
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              MirrorAnimation<Offset>(
+                                  builder: (_, child, value) {
+                                    return Transform.translate(
+                                      offset: value,
+                                      child: Icon(Icons.arrow_back_ios,
+                                          color: kMedRed),
+                                    );
+                                  },
+                                  curve: Curves.decelerate,
+                                  tween: Tween(
+                                      begin: Offset(0, 0),
+                                      end: Offset(-halfWidth, 0))),
+                              Text("Add something to cart"),
+                            ],
+                          );
+                        } else {
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              child!,
+                              MirrorAnimation<Offset>(
+                                  builder: (_, child, value) {
+                                    return Transform.translate(
+                                      offset: value,
+                                      child: Icon(Icons.arrow_forward_ios,
+                                          color: kMedRed),
+                                    );
+                                  },
+                                  curve: Curves.decelerate,
+                                  tween: Tween(
+                                      begin: Offset(checkOutHalfWidth, 0),
+                                      end: Offset(0, 0))),
+                            ],
+                          );
+                        }
+                      },
+                      child: Text("Checkout Immediately"),
+                    ),
+                    onTap: () {
+                      if (context.read(cartService).items.isEmpty) {
+                        Navigator.pushNamedAndRemoveUntil(context, Routes.home,
+                            (route) {
+                          log("Routes :${route.settings.name}");
+                          return route.settings.name == Routes.detailProduct
+                              ? true
+                              : false;
+                        });
+                      }
+                    }),
+              );
+            }),
           ],
         ),
       ),
+    );
+  }
+
+  Size _textSize(String text, [TextStyle? style]) {
+    final textPaint = TextPainter(
+        text: TextSpan(text: text, style: style),
+        textDirection: TextDirection.ltr)
+      ..layout();
+    return textPaint.size;
+  }
+
+  Widget _buildLoaderIndicator() {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(
+          child: MirrorAnimation<double>(
+              tween: Tween(begin: 0, end: 50),
+              builder: (context, child, value) {
+                return Container(
+                  margin: EdgeInsets.only(top: value),
+                  child: const CircularProgressIndicator(
+                    backgroundColor: kThemeColor,
+                    valueColor: AlwaysStoppedAnimation<Color>(kMedRed),
+                  ),
+                );
+              })),
     );
   }
 
