@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:style_on_app/domain/model/bag_model.dart';
+import 'package:style_on_app/domain/services/cart_service.dart';
 import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports/pkgs_exports.dart';
 import 'package:style_on_app/exports/ui_exports.dart';
@@ -19,7 +20,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final animatedKey = GlobalKey<SliverAnimatedListState>();
-
+  double totalAmount = 0;
   @override
   void initState() {
     super.initState();
@@ -41,6 +42,8 @@ class _CartScreenState extends State<CartScreen> {
           //show WishList Icon and Replace Rout with WishList
           //Navigator.pop(context)
         },
+        replaceCartWidget:
+            IconButton(icon: Icon(CupertinoIcons.heart), onPressed: () {}),
         firstIcon: CupertinoIcons.bell,
         onFirstTap: () {},
       ),
@@ -55,10 +58,32 @@ class _CartScreenState extends State<CartScreen> {
                 key: animatedKey,
                 initialItemCount: _list.length,
                 itemBuilder: (_, index, animation) {
+                  totalAmount += _list[index].productPrice;
                   return _buildCartItem(_list[index], index, animation);
                 },
               );
             }),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text("Total: ", style: Theme.of(context).textTheme.subtitle2),
+                Consumer(builder: (context, watch, child) {
+                  return Text("Rs: ${watch(cartService).totalAmount}");
+                }),
+              ],
+            ),
+            FullWidthIconButton(
+                buttonColor: kThemeColor,
+                text: Text("Checkout Immediately"),
+                onTap: () {}),
           ],
         ),
       ),
@@ -96,13 +121,20 @@ class _CartScreenState extends State<CartScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildText(
-                          index.toString(),
+                          model.productTitle,
                         ),
                         //Price
                         Padding(
                           padding:
                               EdgeInsets.symmetric(vertical: kPaddingSmall),
-                          child: _buildText("Rs: ${model.productPrice}"),
+                          child: Row(
+                            children: [
+                              _buildText("Rs: ${model.productPrice}"),
+                              smallestHztSpacer,
+                              Text("x ${model.qty}",
+                                  style: Theme.of(context).textTheme.subtitle2),
+                            ],
+                          ),
                         ),
                         //Options
                         model.option.isEmpty
@@ -143,15 +175,30 @@ class _CartScreenState extends State<CartScreen> {
                     child: Row(
                       children: [
                         InkWell(
-                            child: const Icon(Icons.add_circle), onTap: () {}),
+                            child: const Icon(Icons.add_circle),
+                            onTap: () {
+                              log("Tapped");
+                              context
+                                  .read(cartService)
+                                  .updateCart(index, UpdateBagType.increment);
+                            }),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: kPaddingSmall),
-                          child: _buildText("35"),
+                          child: Consumer(builder: (context, watch, child) {
+                            return _buildText("${model.qty}");
+                          }),
                         ),
                         InkWell(
-                            child: const Icon(Icons.remove_circle),
-                            onTap: () {}),
+                          child: const Icon(Icons.remove_circle),
+                          onTap: () {
+                            if (model.qty > 1) {
+                              context
+                                  .read(cartService)
+                                  .updateCart(index, UpdateBagType.decrement);
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),

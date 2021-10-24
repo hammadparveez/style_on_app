@@ -7,24 +7,29 @@ class BagModel {
   String productTitle;
   List<dynamic> option;
   double productPrice;
+  int qty = 1;
   BagModel({
     required this.productThumbnail,
     required this.productTitle,
     required this.option,
     required this.productPrice,
+    this.qty = 1,
   });
+ 
 
   BagModel copyWith({
     String? productThumbnail,
     String? productTitle,
     List<dynamic>? option,
     double? productPrice,
+    int? qty,
   }) {
     return BagModel(
       productThumbnail: productThumbnail ?? this.productThumbnail,
       productTitle: productTitle ?? this.productTitle,
       option: option ?? this.option,
       productPrice: productPrice ?? this.productPrice,
+      qty: qty ?? this.qty,
     );
   }
 
@@ -34,6 +39,7 @@ class BagModel {
       'productTitle': productTitle,
       'option': option,
       'productPrice': productPrice,
+      'qty': qty,
     };
   }
 
@@ -43,6 +49,7 @@ class BagModel {
       productTitle: map['productTitle'],
       option: List<dynamic>.from(map['option']),
       productPrice: map['productPrice'],
+      qty: map['qty'],
     );
   }
 
@@ -52,7 +59,7 @@ class BagModel {
 
   @override
   String toString() {
-    return 'BagModel(productThumbnail: $productThumbnail, productTitle: $productTitle, option: $option, productPrice: $productPrice)';
+    return 'BagModel(productThumbnail: $productThumbnail, productTitle: $productTitle, option: $option, productPrice: $productPrice, qty: $qty)';
   }
 
   @override
@@ -63,7 +70,8 @@ class BagModel {
       other.productThumbnail == productThumbnail &&
       other.productTitle == productTitle &&
       listEquals(other.option, option) &&
-      other.productPrice == productPrice;
+      other.productPrice == productPrice &&
+      other.qty == qty;
   }
 
   @override
@@ -71,6 +79,7 @@ class BagModel {
     return productThumbnail.hashCode ^
       productTitle.hashCode ^
       option.hashCode ^
-      productPrice.hashCode;
+      productPrice.hashCode ^
+      qty.hashCode;
   }
 }
