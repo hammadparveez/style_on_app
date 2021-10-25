@@ -1,5 +1,6 @@
 import 'package:style_on_app/exports.dart';
-import 'package:style_on_app/ui/cart/cart_screen.dart';
+import 'package:style_on_app/ui/bag/cart_screen.dart';
+
 import 'package:style_on_app/ui/detail_page/product_detail_page.dart';
 
 class Routes {

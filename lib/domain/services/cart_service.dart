@@ -15,17 +15,17 @@ enum UpdateBagType {
 
 enum LoadingStatus { error, loading, success }
 
-class CartService extends ChangeNotifier {
-  CartService(BagRepository repo) : _cartRepository = repo;
+class BagService extends ChangeNotifier {
+  BagService(BagRepository repo) : _cartRepository = repo;
 
   final BagRepository _cartRepository;
   var _status = LoadingStatus.loading;
   final LocalCartSerivce _localCartSerivce = LocalCartSerivce();
   double _totalAmount = 0;
 
-List<BagModel> _items = [];
- List<BagModel> get items => _items;
- 
+  List<BagModel> _items = [];
+  List<BagModel> get items => _items;
+
   // List<dynamic> _localItems = [];
   double get totalAmount => _totalAmount;
   LoadingStatus get status => _status;

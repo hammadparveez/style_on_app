@@ -47,7 +47,7 @@ class DefaultAppBar extends AppBar {
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: kThemeColor),
               child: Consumer(builder: (context, watch, child) {
-                var itemsLength = watch(cartService).items.length;
+                var itemsLength = watch(bagService).items.length;
                 var itemCount = itemsLength > 99 ? "99+" : itemsLength;
                 return Text("$itemCount",
                     style: const TextStyle(

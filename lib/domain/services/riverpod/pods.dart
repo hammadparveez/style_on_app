@@ -5,7 +5,8 @@ import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/infrastructure/cart_repository_impl.dart';
 
 final productService = ChangeNotifierProvider((ref) => ProductService());
-final cartService = ChangeNotifierProvider((ref) => CartService(CartRepositoryImpl()));
+final bagService =
+    ChangeNotifierProvider((ref) => BagService(CartRepositoryImpl()));
 
 final productsSnapshot = StreamProvider((ref) {
   return ref.watch(productService).snapshot();

@@ -27,7 +27,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>
   void initState() {
     super.initState();
     Future.microtask(() {
-      context.read(cartService).fetchAllCart();
+      context.read(bagService).fetchAllCart();
     });
     _optionAnimController = CustomAnimationControl.stop;
     _expandableController = ExpandableController()..expanded = true;
@@ -285,9 +285,8 @@ class _ProductDetailPageState extends State<ProductDetailPage>
         var color = model.options?.color?[colorSelectedIndex];
         var size = model.options?.size?[sizeSelectedIndex];
 
-        await context.read(cartService).addToCart(
+        await context.read(bagService).addToCart(
               BagModel(
-                
                 productThumbnail: model.imagesLinks![0],
                 productTitle: model.title,
                 option: [color, size],
