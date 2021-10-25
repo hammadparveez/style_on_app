@@ -27,6 +27,10 @@ class AppStrings {
   static const dontHaveAccount = "Don't have an account? Create Account";
   static const signUpDesc = "Sign up now\nget 30% cashback\non first purchase";
   static const addToCart = "Add to Cart";
+  static const addSthToCart = "Add Something To Cart";
+  static const checkoutImmediately = "Checkout Immediately";
+  static const clearAll = "Clear All";
+  static const nothingToClear = "Nothing to Clear";
   static const buyNow = "Buy Now";
   static const addToWishlist= "Add to Wishlist";
 }
