@@ -4,6 +4,7 @@ import 'package:style_on_app/domain/services/riverpod/pods.dart';
 
 import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
+import 'package:style_on_app/ui/base_widgets/custom_drawer.dart';
 import 'package:style_on_app/utils/constants/images_paths.dart';
 
 class Home extends StatefulWidget {
@@ -34,7 +35,10 @@ class _HomeState extends State<Home> {
     ];
 
     return Scaffold(
-      drawer: Drawer(),
+      
+      drawer: const Drawer( 
+        
+        child: CustomDrawerBody(),),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

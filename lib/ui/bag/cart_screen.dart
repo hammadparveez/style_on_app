@@ -61,7 +61,7 @@ class _CartScreenState extends State<CartScreen> {
         replaceCartWidget: IconButton(
             icon: const Icon(CupertinoIcons.heart),
             onPressed: () {
-              context.read(bagService).deleteAllCarts();
+              // context.read(bagService).deleteAllCarts();
             }),
         firstIcon: CupertinoIcons.bell,
         onFirstTap: () {},

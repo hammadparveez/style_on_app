@@ -1,11 +1,18 @@
 class AppStrings {
   static const home = "Home";
   static const notifications = "Notifications";
+  static const orders = "Orders";
+  static const cart = "Cart";
+  static const favorites= "Favorites";
+  
+  
   static const skip = "Skip";
   static const loading = "Loading...";
   static const favorite = "Favorite";
+  static const explore = "Explore";
   static const settings = "Settings";
   static const profile = "Profile";
+  static const about = "About";
   static const letsExplore = "Let's Explore";
   static const letsExplorDesc = "Explore the new\nworld of clothing";
   static const detailPagePreview = "Product Detail";
@@ -13,6 +20,7 @@ class AppStrings {
   static const style = "Style";
   static const O = "O";
   static const signIn = "Sign In";
+  static const signOut = "Sign Out";
   static const signUp = "Sign Up";
   static const createAccount = "Create an Account";
   static const enterEmail = "Enter a Email";
