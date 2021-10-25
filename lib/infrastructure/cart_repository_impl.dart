@@ -58,11 +58,8 @@ class CartRepositoryImpl extends BagRepository
 
   @override
   updateItem(BagModel model) async {
-    log("Updated Data ${model.toMap()}");
-    // await _cartCollectionRefrence().doc(model.cartId).update(
-    //   {
-    //     'qty': model.qty,
-    //   },
-    // );
+    await _cartCollectionRefrence().doc(model.cartId).update(
+          model.toMap(),
+        );
   }
 }

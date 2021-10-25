@@ -32,7 +32,7 @@ class BagModel {
       option: option ?? this.option,
       productPrice: productPrice ?? this.productPrice,
       qty: qty ?? this.qty,
-    );
+    )..cartId = this.cartId;
   }
 
   Map<String, dynamic> toMap() {

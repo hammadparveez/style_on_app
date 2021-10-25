@@ -23,9 +23,10 @@ class CartService extends ChangeNotifier {
   final LocalCartSerivce _localCartSerivce = LocalCartSerivce();
   double _totalAmount = 0;
 
-  List<BagModel> items = [];
-
-  List<dynamic> _localItems = [];
+List<BagModel> _items = [];
+ List<BagModel> get items => _items;
+ 
+  // List<dynamic> _localItems = [];
   double get totalAmount => _totalAmount;
   LoadingStatus get status => _status;
   addToCart(BagModel model) async {
@@ -35,7 +36,7 @@ class CartService extends ChangeNotifier {
 
     try {
       await _cartRepository.addItem(model);
-      items.add(model);
+      _items.add(model);
       _status = LoadingStatus.success;
     } catch (e) {
       _status = LoadingStatus.success;
@@ -58,8 +59,8 @@ class CartService extends ChangeNotifier {
     // }).toList();
 
     try {
-      items = await _cartRepository.fetchAllItems();
-      for (var model in items) {
+      _items = await _cartRepository.fetchAllItems();
+      for (var model in _items) {
         _totalAmount += model.productPrice * model.qty;
       }
       _status = LoadingStatus.success;
@@ -68,12 +69,11 @@ class CartService extends ChangeNotifier {
     }
 
     notifyListeners();
-    return items;
+    return _items;
   }
 
   updateCart(int index, UpdateBagType type) async {
-    BagModel _model = items[index];
-    log("Model ID: ${_model.cartId}");
+    BagModel _model = _items[index];
     //Resting current Index Prices to 0;
     _totalAmount -= (_model.productPrice * _model.qty);
     if (type == UpdateBagType.increment) {
@@ -91,7 +91,7 @@ class CartService extends ChangeNotifier {
   deleteCart(int index) {
     //_localCartSerivce.deleteItem(index);
 
-    var model = items.removeAt(index);
+    var model = _items.removeAt(index);
     _totalAmount -= (model.productPrice * model.qty);
     _cartRepository.deleteItem(model.cartId);
     notifyListeners();
@@ -101,7 +101,7 @@ class CartService extends ChangeNotifier {
     //_localCartSerivce.clearCart();
 
     await _cartRepository.deleteAll();
-    items.clear();
+    _items.clear();
     _totalAmount = 0;
     notifyListeners();
   }
