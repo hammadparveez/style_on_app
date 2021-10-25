@@ -16,6 +16,7 @@ const double kfontLargest = 55;
 //Values
 const double kValue8 = 8;
 const double kValue10 = 10;
+const double kValue15 = 15;
 const double kValue20 = 20;
 const double kValue25 = 25;
 const double kValue30 = 30;

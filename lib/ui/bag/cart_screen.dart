@@ -28,7 +28,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   final animatedKey = GlobalKey<SliverAnimatedListState>();
   double totalAmount = 0;
-  BagModel? _model;
+
   @override
   void initState() {
     super.initState();
@@ -45,13 +45,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   _updateCart(int index, UpdateBagType type) {
-    if (type == UpdateBagType.increment) {
-      context.read(bagService).updateCart(index, type);
-    } else if (type == UpdateBagType.decrement) {
-      if (_model!.qty > 1) {
-        context.read(bagService).updateCart(index, type);
-      }
-    }
+    context.read(bagService).updateCart(index, type);
   }
 
   @override
@@ -63,7 +57,7 @@ class _CartScreenState extends State<CartScreen> {
           //Navigator.pop(context)
         },
         replaceCartWidget: IconButton(
-            icon: Icon(CupertinoIcons.heart),
+            icon: const Icon(CupertinoIcons.heart),
             onPressed: () {
               context.read(bagService).deleteAllCarts();
             }),
@@ -74,6 +68,8 @@ class _CartScreenState extends State<CartScreen> {
         padding: const EdgeInsets.all(kPadding10),
         child: CustomScrollView(
           slivers: [
+            //Empty [SliverToBoxAdapter] because On Consumer Status Update
+            // Creating SliverAnimatedList  throws Error
             const SliverToBoxAdapter(),
             Consumer(builder: (context, watch, value) {
               var _list = watch(bagService).items;
@@ -90,9 +86,7 @@ class _CartScreenState extends State<CartScreen> {
                 key: animatedKey,
                 initialItemCount: _list.length,
                 itemBuilder: (_, index, animation) {
-                  totalAmount += _list[index].productPrice;
-                  _model = _list[index];
-                  return _buildCartItem(_model!, index, animation);
+                  return _buildCartItem(_list[index], index, animation);
                 },
               );
             }),
@@ -189,7 +183,7 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
-
+  //TextPainter which returns Text Width using Canvas
   Size _textSize(String text, [TextStyle? style]) {
     final textPaint = TextPainter(
         text: TextSpan(text: text, style: style),
@@ -244,26 +238,31 @@ class _CartScreenState extends State<CartScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CardTitle(model.productTitle),
-              _buildCardPriceWithQty(),
-              _buildOptions(),
+              _buildCardPriceWithQty(index, model),
+              _buildOptions(index, model),
             ],
           ),
         ),
         mediumHztSpacer,
-        _buildUpdateCartBtns(index),
+        _buildUpdateCartBtns(index, model),
       ],
     );
   }
 
-  Center _buildUpdateCartBtns(int index) {
+  Center _buildUpdateCartBtns(int index, BagModel model) {
     return Center(
       child: Row(
         children: [
           InkWell(
             child: const Icon(Icons.add_circle),
-            onTap: () => _updateCart(index, UpdateBagType.increment),
+            onTap: () {
+              _updateCart(index, UpdateBagType.increment);
+            },
           ),
-          _buildQuantityText(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPaddingSmall),
+            child: CardTitle("${model.qty}"),
+          ),
           InkWell(
             child: const Icon(Icons.remove_circle),
             onTap: () => _updateCart(index, UpdateBagType.decrement),
@@ -273,47 +272,35 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Padding _buildQuantityText() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kPaddingSmall),
-      child: Consumer(builder: (context, watch, child) {
-        return CardTitle("${_model!.qty}");
-      }),
-    );
-  }
-
-  Padding _buildCardPriceWithQty() {
+  Padding _buildCardPriceWithQty(int index, BagModel model) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: kPaddingSmall),
       child: Row(
         children: [
-          CardTitle("Rs: ${_model!.productPrice}"),
+          CardTitle("Rs: ${model.productPrice}"),
           smallestHztSpacer,
-          Text("x ${_model!.qty}",
-              style: Theme.of(context).textTheme.subtitle2),
+          Text("x ${model.qty}", style: Theme.of(context).textTheme.subtitle2),
         ],
       ),
     );
   }
 
-  Widget _buildOptions() {
+  Widget _buildOptions(int index, model) {
     const emptyspacer = SizedBox();
-    if (_model!.option.isEmpty) {
+    if (model.option.isEmpty) {
       return emptyspacer;
     } else {
-      var hasColor = _model!.option[0] != null;
-      var hasSize = _model!.option[1] != null;
+      var hasColor = model.option[0] != null;
+      var hasSize = model.option[1] != null;
       var showSlash = hasColor && hasSize;
       return Row(
         children: [
-          hasColor
-              ? CardCircularColor(hexColor: _model!.option[0])
-              : emptyspacer,
+          hasColor ? CardCircularColor(hexColor: model.option[0]) : emptyspacer,
           showSlash ? const Text(" / ") : emptyspacer,
-          //const SizedBox(width: 5),
+          
           hasSize
               ? CardTitle(
-                  sizeStringify(_model!.option[1]),
+                  sizeStringify(model.option[1]),
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1
@@ -325,7 +312,3 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 }
-
-
-
-

@@ -1,4 +1,3 @@
-
 import 'package:hexcolor/hexcolor.dart';
 import 'package:style_on_app/exports.dart';
 
@@ -13,8 +12,8 @@ class CardCircularColor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: kValue25,
-      height: kValue25,
+      width: kValue15,
+      height: kValue15,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: HexColor(hexColor),

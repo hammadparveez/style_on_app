@@ -79,12 +79,16 @@ class BagService extends ChangeNotifier {
     if (type == UpdateBagType.increment) {
       _model = _model.copyWith(qty: ++_model.qty);
     } else if (type == UpdateBagType.decrement) {
-      _model = _model.copyWith(qty: --_model.qty);
+      if (_model.qty > 1) {
+        _model = _model.copyWith(qty: --_model.qty);
+      } else
+        return;
     }
     _totalAmount += (_model.productPrice * _model.qty);
     //await _localCartSerivce.updateItem(index, _model);
+    _items[index] = _model;
+    notifyListeners();
     await _cartRepository.updateItem(_model);
-
     notifyListeners();
   }
 
