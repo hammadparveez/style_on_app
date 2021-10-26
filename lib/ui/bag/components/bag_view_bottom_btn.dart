@@ -57,7 +57,7 @@ class BagScreenBottomBotton extends StatelessWidget {
                   log("Bakward");
                 },
                 onForwardTap: () {
-                  log("Forward");
+                  Navigator.pushNamed(context, Routes.address);
                 });
           }),
         ],

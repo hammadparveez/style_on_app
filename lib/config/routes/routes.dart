@@ -1,4 +1,5 @@
 import 'package:style_on_app/exports.dart';
+import 'package:style_on_app/ui/address/address_screen.dart';
 import 'package:style_on_app/ui/bag/cart_screen.dart';
 
 import 'package:style_on_app/ui/detail_page/product_detail_page.dart';
@@ -14,6 +15,7 @@ class Routes {
   static const detailProduct = "detail_product";
   static const order = "order";
   static const checkout = "checkout";
+  static const address = "address";
   static const search = "search";
   static const cart = "cart";
   static const wishlist = "wishlist";
@@ -30,6 +32,8 @@ class Routes {
           return ProductDetailPage(model: model);
         case cart:
           return const CartScreen();
+        case address:
+          return const AddressScreen();
         case signUp:
           return const SignUp();
         case signIn:

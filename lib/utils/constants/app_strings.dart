@@ -3,10 +3,11 @@ class AppStrings {
   static const notifications = "Notifications";
   static const orders = "Orders";
   static const cart = "Cart";
-  static const favorites= "Favorites";
-  
-  
+  static const favorites = "Favorites";
+
   static const skip = "Skip";
+  static const proceedToPay = "Proceed to Payment";
+  static const addShippingInfo = "Add Shipping Details";
   static const loading = "Loading...";
   static const favorite = "Favorite";
   static const explore = "Explore";
@@ -24,12 +25,30 @@ class AppStrings {
   static const signUp = "Sign Up";
   static const createAccount = "Create an Account";
   static const enterEmail = "Enter a Email";
+  static const enterFirstName = "Enter First Name";
+  static const enterLastName = "Enter Last Name";
+  static const enterAddress = "Enter Address";
+  static const enterCity = "Enter City";
+  static const enterZipCode = "Enter ZipCode";
+  static const enterState = "Enter State";
+  static const enterPhoneNo = "Enter Phone No.";
   static const enterPassword = "Enter a Password";
   static const enterConfirmPass = "Enter a Confirm Password";
   static const signInwithGoogle = "Sign In with Google";
   static const signInWithEmail = "Sign Up with Email";
   static const forgetPassword = "Forget Password?";
   static const rememberMe = "Remember me";
+  static const firstName = "First Name";
+  static const lastName = "Last Name";
+  static const address = "Address";
+  static const city = "City";
+  static const zipCode = "Zip Code";
+  static const state = "State";
+  static const mobileNo = "Phone No.";
+  static const shipping = "Shipping";
+  static const payment = "Payment";
+  static const orderPlaced = "Order Placed";
+
   static const alreadyHaveAccount = "Already have an account? Sign In";
 
   static const dontHaveAccount = "Don't have an account? Create Account";
@@ -40,5 +59,5 @@ class AppStrings {
   static const clearAll = "Clear All";
   static const nothingToClear = "Nothing to Clear";
   static const buyNow = "Buy Now";
-  static const addToWishlist= "Add to Wishlist";
+  static const addToWishlist = "Add to Wishlist";
 }

@@ -31,6 +31,7 @@ const double kPadding15 = 15;
 const double kPadding20 = 20;
 
 //Colors
+const kTransParent = Colors.transparent;
 const kThemeColor = Color(0xFF3D3D3D);
 const kWhiteColor = Color(0xFFFFFFFF);
 const kLightGrey = Color(0xFFE6E6E6);
@@ -52,6 +53,7 @@ const mediumVrtSpacer = SizedBox(height: 10);
 const largeVrtSpacer = SizedBox(height: 20);
 const largestVrtSpacer = SizedBox(height: 30);
 //Horizontal Spacers
+const ultraSmallestHztSpacer = SizedBox(width: 3);
 const smallestHztSpacer = SizedBox(width: 5);
 const smallHztSpacer = SizedBox(width: 8);
 const mediumHztSpacer = SizedBox(width: 10);

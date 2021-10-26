@@ -3,6 +3,7 @@ import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports.dart';
 
 class DefaultAppBar extends AppBar {
+  final Color? appBarColor;
   final VoidCallback? onFirstTap, onSecondTap, onThirdTap;
   final IconData? firstIcon, secondIcon;
   final Widget? replaceCartWidget;
@@ -13,11 +14,13 @@ class DefaultAppBar extends AppBar {
       this.onThirdTap,
       this.firstIcon,
       this.secondIcon,
+      this.appBarColor,
       this.replaceCartWidget})
       : super(
           key: key,
           foregroundColor: Colors.black,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor ?? Colors.white,
+          elevation: 0,
           actions: [
             firstIcon == null
                 ? const SizedBox()
