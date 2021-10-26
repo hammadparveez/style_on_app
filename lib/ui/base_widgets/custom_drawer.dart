@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 
 import 'package:style_on_app/exports/ui_exports.dart';
@@ -44,22 +46,53 @@ class CustomDrawerBody extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(kPadding20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 100,
+                height: context.h(.12),
                 child: DrawerHeader(
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: AssetImage(ImagePaths.bg),
-                      )
-                    ],
+                  padding: EdgeInsets.zero,
+                  child: Material(
+                    type: MaterialType.transparency,
+                    clipBehavior: Clip.antiAlias,
+                    borderRadius: BorderRadius.circular(kValue10),
+                    child: InkResponse(
+                      radius: kValue20,
+                      child: ListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: kPaddingSmall),
+                        onTap: () {
+                          log("Tapped");
+                        },
+                        leading: Material(
+                          clipBehavior: Clip.antiAlias,
+                          type: MaterialType.transparency,
+                          shape: const CircleBorder(),
+                          child: Ink.image(
+                            padding: EdgeInsets.zero,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            image: AssetImage(ImagePaths.bg),
+                          ),
+                        ),
+                        minVerticalPadding: 0,
+                        subtitle: FittedBox(
+                            child: Text("hammadpervez6@gmail.com",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1
+                                    ?.copyWith(color: kWhiteColor))),
+                        title: Text("Hammad Parveez",
+                            style: TextStyle(color: kWhiteColor)),
+                      ),
+                    ),
                   ),
                 ),
               ),
               Expanded(
                 child: ListView(
-                  children: _items,
+                  children: [..._items],
                 ),
               ),
               CustomListTile(
