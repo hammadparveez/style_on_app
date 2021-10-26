@@ -1,5 +1,7 @@
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'dart:developer';
 
+import 'package:flutter_hooks/flutter_hooks.dart';
+import "package:flash/flash.dart" as flash;
 import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/ui/base_widgets/default_appbar.dart';
 
@@ -11,6 +13,7 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> {
+  late GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
   late TextEditingController firstNameController,
       lastNameController,
       addressController,
@@ -43,12 +46,30 @@ class _AddressScreenState extends State<AddressScreen> {
     super.dispose();
   }
 
-  _buildCircle([double radius = kValue10]) {
-    return SizedBox.square(
-      dimension: radius,
-      child: CircleAvatar(backgroundColor: kThemeColor),
-    );
+  _onSetData() async {
+    context.showErrorBar(
+        content: Text(
+          "Something went wrong",
+        ),
+        duration: Duration(seconds: 10));
+    //var isValid = _formKey.currentState?.validate() ?? false;
+    //await Future.delayed(Duration(milliseconds: 2));
+    //var focusScope = FocusScope.of(context);
+    //if (focusScope.hasPrimaryFocus) focusScope.unfocus();
+    //FocusManager.instance.primaryFocus!.unfocus();
+    // WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
   }
+
+  String? _firstNameValidator(String? value) {
+    if (value!.isEmpty) return "First Name must be filled";
+  }
+
+  String? _lastNameValidator(String? value) {}
+  String? _addrValidator(String? value) {}
+  String? _cityValidator(String? value) {}
+  String? _zipCodeValidator(String? value) {}
+  String? _stateValidator(String? value) {}
+  String? _phoneNoValidator(String? value) {}
 
   @override
   Widget build(BuildContext context) {
@@ -65,79 +86,105 @@ class _AddressScreenState extends State<AddressScreen> {
         ));
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: DefaultAppBar(appBarColor: kTransParent),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: kPadding20),
-        child: Column(
-          children: [
-            mediumVrtSpacer,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: LayoutBuilder(builder: (context, cons) {
+        log("Constraints $cons");
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPadding20),
+            child: Column(
               children: [
-                Text(AppStrings.shipping, style: _defaultStyle),
-                _circles,
-                Text(AppStrings.payment,
-                    style: _defaultStyle?.copyWith(color: kDarkGrey)),
-                _circles,
-                Text(AppStrings.orderPlaced,
-                    style: _defaultStyle?.copyWith(color: kDarkGrey)),
+                mediumVrtSpacer,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          log("Tapped");
+                          WidgetsBinding.instance?.focusManager.primaryFocus
+                              ?.unfocus();
+                        },
+                        child: Text(AppStrings.shipping, style: _defaultStyle)),
+                    _circles,
+                    Text(AppStrings.payment,
+                        style: _defaultStyle?.copyWith(color: kDarkGrey)),
+                    _circles,
+                    Text(AppStrings.orderPlaced,
+                        style: _defaultStyle?.copyWith(color: kDarkGrey)),
+                  ],
+                ),
+                mediumVrtSpacer,
+                Text(AppStrings.addShippingInfo,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1
+                        ?.copyWith(color: kThemeColor, fontSize: kfont20)),
+                mediumVrtSpacer,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      _buildFieldWithDefaultPadding(CustomLabeledTextField(
+                          labelText: AppStrings.firstName,
+                          hintText: AppStrings.enterFirstName,
+                          validator: _firstNameValidator,
+                          controller: firstNameController)),
+                      _buildFieldWithDefaultPadding(CustomLabeledTextField(
+                          labelText: AppStrings.lastName,
+                          validator: _lastNameValidator,
+                          hintText: AppStrings.enterLastName,
+                          controller: lastNameController)),
+                      _buildFieldWithDefaultPadding(CustomLabeledTextField(
+                          labelText: AppStrings.address,
+                          validator: _addrValidator,
+                          hintText: AppStrings.enterAddress,
+                          controller: addressController)),
+                      _buildFieldWithDefaultPadding(CustomLabeledTextField(
+                          labelText: AppStrings.city,
+                          hintText: AppStrings.enterCity,
+                          validator: _cityValidator,
+                          controller: cityController)),
+                      _buildFieldWithDefaultPadding(CustomLabeledTextField(
+                          labelText: AppStrings.zipCode,
+                          validator: _zipCodeValidator,
+                          hintText: AppStrings.enterZipCode,
+                          controller: stateController)),
+                      _buildFieldWithDefaultPadding(CustomLabeledTextField(
+                          labelText: AppStrings.state,
+                          validator: _stateValidator,
+                          hintText: AppStrings.enterState,
+                          controller: zipCodeController)),
+                      _buildFieldWithDefaultPadding(CustomLabeledTextField(
+                          labelText: AppStrings.mobileNo,
+                          validator: _phoneNoValidator,
+                          hintText: AppStrings.enterPhoneNo,
+                          controller: mobileNoController)),
+                    ],
+                  ),
+                ),
+                FullWidthIconButton(
+                    buttonColor: kThemeColor,
+                    text: const Text(AppStrings.proceedToPay),
+                    onTap: _onSetData),
               ],
             ),
-            mediumVrtSpacer,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppStrings.addShippingInfo,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1
-                          ?.copyWith(color: kThemeColor, fontSize: kfont20)),
-                  mediumVrtSpacer,
-                  _buildFieldWithDefaultPadding(CustomLabeledTextField(
-                      labelText: AppStrings.firstName,
-                      hintText: AppStrings.enterFirstName,
-                      controller: firstNameController)),
-                  _buildFieldWithDefaultPadding(CustomLabeledTextField(
-                      labelText: AppStrings.lastName,
-                      hintText: AppStrings.enterLastName,
-                      controller: lastNameController)),
-                  _buildFieldWithDefaultPadding(CustomLabeledTextField(
-                      labelText: AppStrings.address,
-                      hintText: AppStrings.enterAddress,
-                      controller: addressController)),
-                  _buildFieldWithDefaultPadding(CustomLabeledTextField(
-                      labelText: AppStrings.city,
-                      hintText: AppStrings.enterCity,
-                      controller: cityController)),
-                  _buildFieldWithDefaultPadding(CustomLabeledTextField(
-                      labelText: AppStrings.zipCode,
-                      hintText: AppStrings.enterZipCode,
-                      controller: stateController)),
-                  _buildFieldWithDefaultPadding(CustomLabeledTextField(
-                      labelText: AppStrings.state,
-                      hintText: AppStrings.enterState,
-                      controller: zipCodeController)),
-                  _buildFieldWithDefaultPadding(CustomLabeledTextField(
-                      labelText: AppStrings.mobileNo,
-                      hintText: AppStrings.enterPhoneNo,
-                      controller: mobileNoController)),
-                ],
-              ),
-            ),
-            FullWidthIconButton(
-                buttonColor: kThemeColor,
-                text: const Text(AppStrings.proceedToPay),
-                onTap: () {}),
-          ],
-        ),
-      ),
+          ),
+        );
+      }),
     );
   }
 
   _buildFieldWithDefaultPadding(Widget child) {
     return Padding(
         padding: const EdgeInsets.only(bottom: kPadding10), child: child);
+  }
+
+  _buildCircle([double radius = kValue10]) {
+    return SizedBox.square(
+      dimension: radius,
+      child: const CircleAvatar(backgroundColor: kThemeColor),
+    );
   }
 }
 
