@@ -80,7 +80,10 @@ class _ProductDetailPageState extends State<ProductDetailPage>
           ),
         ),
       ),
-      bottomNavigationBar: _buildAnimatedSwitcher(),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kPaddingDefault),
+        child: _buildAnimatedSwitcher(),
+      ),
     );
   }
 
@@ -267,36 +270,41 @@ class _ProductDetailPageState extends State<ProductDetailPage>
   }
 
   Widget _addToCartButton() {
-    jsonEncode({});
     return FullWidthIconButton(
       onTap: () {
         setState(() {
           swtichedWidget = _buildBottomNavigation();
         });
+        Navigator.of(context).pushNamed(Routes.cart);
       },
       text: const Text(AppStrings.buyNow),
     );
   }
 
-  BottomNavigationBar _buildBottomNavigation() {
+  Widget _buildBottomNavigation() {
+    return FullWidthIconButton(
+        key: const ValueKey('cart-button'),
+        buttonColor: kThemeColor,
+        text: const Text(AppStrings.addToCart),
+        onTap: () async {
+          var model = widget.model;
+          var color = model.options?.color?[colorSelectedIndex];
+          var size = model.options?.size?[sizeSelectedIndex];
+
+          await context.read(bagService).addToCart(
+                BagModel(
+                  productThumbnail: model.imagesLinks![0],
+                  productTitle: model.title,
+                  option: [color, size],
+                  productPrice: double.tryParse(model.price) ?? 0,
+                ),
+              );
+
+          swtichedWidget = _addToCartButton();
+          setState(() {});
+        });
     return BottomNavigationBar(
-      onTap: (index) async {
-        var model = widget.model;
-        var color = model.options?.color?[colorSelectedIndex];
-        var size = model.options?.size?[sizeSelectedIndex];
-
-        await context.read(bagService).addToCart(
-              BagModel(
-                productThumbnail: model.imagesLinks![0],
-                productTitle: model.title,
-                option: [color, size],
-                productPrice: double.tryParse(model.price) ?? 0,
-              ),
-            );
-
-        swtichedWidget = _addToCartButton();
-        setState(() {});
-      },
+      onTap: (index) async {},
       items: const [
         BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.shopping_cart),
