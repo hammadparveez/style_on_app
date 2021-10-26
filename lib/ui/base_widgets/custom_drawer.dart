@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:style_on_app/exports/pkgs_exports.dart';
 
 import 'package:style_on_app/exports/ui_exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
@@ -49,33 +50,43 @@ class CustomDrawerBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: context.h(.12),
+                height: context.h(.15),
                 child: DrawerHeader(
                   padding: EdgeInsets.zero,
-                  child: Material(
-                    type: MaterialType.transparency,
-                    clipBehavior: Clip.antiAlias,
-                    borderRadius: BorderRadius.circular(kValue10),
-                    child: InkResponse(
-                      radius: kValue20,
+                  child: Center(
+                    child: Material(
+                      type: MaterialType.transparency,
+                      clipBehavior: Clip.antiAlias,
+                      borderRadius: BorderRadius.circular(kValue10),
                       child: ListTile(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: kPaddingSmall),
                         onTap: () {
                           log("Tapped");
                         },
-                        leading: Material(
-                          clipBehavior: Clip.antiAlias,
-                          type: MaterialType.transparency,
-                          shape: const CircleBorder(),
-                          child: Ink.image(
-                            padding: EdgeInsets.zero,
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                            image: AssetImage(ImagePaths.bg),
-                          ),
-                        ),
+                        leading:
+                            LayoutBuilder(builder: (context, constriants) {
+                          debugPrint(" Cons $constriants");
+                          return MirrorAnimation<double>(
+                              tween: Tween(begin: -20, end: 0),
+                              builder: (context, child, value) {
+                                return Transform.translate(
+                                  offset: Offset(value, value),
+                                  child: Material(
+                                    clipBehavior: Clip.antiAlias,
+                                    type: MaterialType.transparency,
+                                    shape: const CircleBorder(),
+                                    child: Ink.image(
+                                      padding: EdgeInsets.zero,
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                      image: AssetImage(ImagePaths.bg),
+                                    ),
+                                  ),
+                                );
+                              });
+                        }),
                         minVerticalPadding: 0,
                         subtitle: FittedBox(
                             child: Text("hammadpervez6@gmail.com",

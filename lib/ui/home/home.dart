@@ -35,8 +35,12 @@ class _HomeState extends State<Home> {
     ];
 
     return Scaffold(
-      drawer: const Drawer(
-        child: CustomDrawerBody(),
+      drawerEnableOpenDragGesture: false,
+      drawer: SizedBox(
+        width: context.w(.8),
+        child: const Drawer(
+          child: CustomDrawerBody(),
+        ),
       ),
       body: CustomScrollView(
         slivers: [
