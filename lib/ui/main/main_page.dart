@@ -17,6 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    
     pages = const [
       Home(),
       AddProductScreen(),
@@ -40,15 +41,17 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
 
-      return  Consumer(builder: (context, watch, child) {
-      final authNotifier = watch(authStateNotifyPod);
-    return authNotifier.when(
-      error: (_, __) => child!,
-      loading: () => child!,
-      data: (data) => data != null ? child! : const AuthScreen(),
+    return Consumer(
+      builder: (context, watch, child) {
+        final authNotifier = watch(authStateNotifyPod);
+        return authNotifier.when(
+          error: (_, __) => child!,
+          loading: () => child!,
+          data: (data) => data != null ? child! : const AuthScreen(),
+        );
+      },
+      child: body,
     );
-    },
-    child: body,);
   }
 
   SalomonBottomBar _buildBottomNavigation() {

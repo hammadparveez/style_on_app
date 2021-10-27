@@ -7,7 +7,8 @@
         {
             "name": "style_on_app",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            
         },
         {
             "name": "style_on_app (profile mode)",

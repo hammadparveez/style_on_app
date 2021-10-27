@@ -33,6 +33,9 @@ class LocalService {
   void setOnBoardSeen() {
     _box.put(onBoardKey, true);
   }
+  void resetOnBoardSeen() {
+    _box.delete(onBoardKey);
+  }
 }
 
 class LocalCartSerivce {

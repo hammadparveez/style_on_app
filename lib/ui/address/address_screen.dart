@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
 import "package:flash/flash.dart" as flash;
@@ -13,6 +14,8 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> {
+  OverlayEntry? _overlayEntry;
+  final _overlayState = GlobalKey<OverlayState>();
   late GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
   late TextEditingController firstNameController,
       lastNameController,
@@ -43,22 +46,11 @@ class _AddressScreenState extends State<AddressScreen> {
     stateController.dispose();
     zipCodeController.dispose();
     mobileNoController.dispose();
+    _overlayEntry?.remove();
     super.dispose();
   }
 
-  _onSetData() async {
-    context.showErrorBar(
-        content: Text(
-          "Something went wrong",
-        ),
-        duration: Duration(seconds: 10));
-    //var isValid = _formKey.currentState?.validate() ?? false;
-    //await Future.delayed(Duration(milliseconds: 2));
-    //var focusScope = FocusScope.of(context);
-    //if (focusScope.hasPrimaryFocus) focusScope.unfocus();
-    //FocusManager.instance.primaryFocus!.unfocus();
-    // WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
-  }
+  _onSetData() async {}
 
   String? _firstNameValidator(String? value) {
     if (value!.isEmpty) return "First Name must be filled";
@@ -89,11 +81,11 @@ class _AddressScreenState extends State<AddressScreen> {
       resizeToAvoidBottomInset: true,
       appBar: DefaultAppBar(appBarColor: kTransParent),
       body: LayoutBuilder(builder: (context, cons) {
-        log("Constraints $cons");
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: kPadding20),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 mediumVrtSpacer,
                 Row(
@@ -101,9 +93,7 @@ class _AddressScreenState extends State<AddressScreen> {
                   children: [
                     GestureDetector(
                         onTap: () {
-                          log("Tapped");
-                          WidgetsBinding.instance?.focusManager.primaryFocus
-                              ?.unfocus();
+                          _overlayEntry?.remove();
                         },
                         child: Text(AppStrings.shipping, style: _defaultStyle)),
                     _circles,

@@ -52,6 +52,10 @@ dependencies:
   expandable: ^5.0.1
   hexcolor: ^2.0.5
   flash: ^2.0.3
+  matrix4_transform: ^2.0.1
+  themed: ^2.3.0
+  #For Ripple Effect Page Transition
+  rect_getter: ^1.0.0
   #Local Storage
   hive: ^2.0.4
   hive_flutter: ^1.1.0

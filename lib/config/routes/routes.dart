@@ -33,7 +33,9 @@ class Routes {
         case cart:
           return const CartScreen();
         case address:
-          return const AddressScreen();
+          return Overlay(
+            initialEntries: [OverlayEntry(builder: (_) => AddressScreen())],
+          );
         case signUp:
           return const SignUp();
         case signIn:
