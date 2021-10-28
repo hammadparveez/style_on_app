@@ -3,6 +3,7 @@ import 'package:style_on_app/ui/address/address_screen.dart';
 import 'package:style_on_app/ui/bag/cart_screen.dart';
 
 import 'package:style_on_app/ui/detail_page/product_detail_page.dart';
+import 'package:style_on_app/ui/payment/payment_screen.dart';
 
 class Routes {
   static const onBoard = "onboard";
@@ -36,6 +37,8 @@ class Routes {
           return Overlay(
             initialEntries: [OverlayEntry(builder: (_) => AddressScreen())],
           );
+        case checkout:
+          return const PaymentScreen();
         case signUp:
           return const SignUp();
         case signIn:

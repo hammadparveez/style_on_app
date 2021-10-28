@@ -34,6 +34,10 @@ class AppStrings {
   static const enterPhoneNo = "Enter Phone No.";
   static const enterPassword = "Enter a Password";
   static const enterConfirmPass = "Enter a Confirm Password";
+  static const enterCCno = "Enter a Credit Card No";
+  static const enterCCName = "Enter a Name on card";
+  static const enterExptDate = "MM/YY";
+  static const enterCVV = "123";
   static const signInwithGoogle = "Sign In with Google";
   static const signInWithEmail = "Sign Up with Email";
   static const forgetPassword = "Forget Password?";
@@ -48,6 +52,10 @@ class AppStrings {
   static const shipping = "Shipping";
   static const payment = "Payment";
   static const orderPlaced = "Order Placed";
+  static const creditCardNo = "Credit Card No.";
+  static const nameOnCard = "Name on card";
+  static const ccExp = "Expiry Date";
+  static const cvv= "CVV";
 
   static const alreadyHaveAccount = "Already have an account? Sign In";
 

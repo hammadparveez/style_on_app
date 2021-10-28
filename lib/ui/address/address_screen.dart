@@ -1,8 +1,4 @@
-import 'dart:developer';
-import 'dart:math';
 
-import 'package:flutter_hooks/flutter_hooks.dart';
-import "package:flash/flash.dart" as flash;
 import 'package:style_on_app/domain/services/riverpod/pods.dart';
 import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/ui/base_widgets/default_appbar.dart';
@@ -29,14 +25,13 @@ class _AddressScreenState extends State<AddressScreen> {
   @override
   void initState() {
     super.initState();
-    firstNameController = TextEditingController(text: 'Hammad');
-    lastNameController = TextEditingController(text: 'Parveez');
-    addressController =
-        TextEditingController(text: 'H 363, Meo Colony, Korangi 3');
-    cityController = TextEditingController(text: 'Karachi');
-    stateController = TextEditingController(text: 'Sindh');
-    zipCodeController = TextEditingController(text: '79400');
-    mobileNoController = TextEditingController(text: '+923182100470');
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
+    addressController = TextEditingController();
+    cityController = TextEditingController();
+    stateController = TextEditingController();
+    zipCodeController = TextEditingController();
+    mobileNoController = TextEditingController();
   }
 
   @override
@@ -54,6 +49,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
   _onSetData() async {
     var isValid = _formKey.currentState?.validate() ?? false;
+    Navigator.pushReplacementNamed(context, Routes.checkout);
     if (isValid) {
       context.read(addressService).addAddress(
           firstNameController.text,

@@ -54,6 +54,11 @@ dependencies:
   flash: ^2.0.3
   matrix4_transform: ^2.0.1
   themed: ^2.3.0
+  flutter_credit_card: ^3.0.1
+  #Overflow issue in this Package
+  awesome_card: ^1.1.5
+  #credit_card: ^0.1.8 -- Non Null Saftey
+
   #For Ripple Effect Page Transition
   rect_getter: ^1.0.0
   #Local Storage

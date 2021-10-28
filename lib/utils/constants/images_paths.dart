@@ -14,6 +14,8 @@ class ImagePaths {
   static const d4 = "assets/images/d3.jpg";
   static const d5 = "assets/images/d4.jpg";
   static const d6 = "assets/images/d5.jpg";
+  static const creditCardBG = "assets/images/credit_card_bg.jpg";
+  static const ccBG = "assets/images/cc_bg.jpg";
   static const color = "assets/images/color.jpg";
   static const earphone = "assets/images/earphone.webp";
 
