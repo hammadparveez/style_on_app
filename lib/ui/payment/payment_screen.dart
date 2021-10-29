@@ -1,10 +1,17 @@
+import 'dart:developer';
+
+import 'package:flutter/services.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:style_on_app/domain/services/riverpod/pods.dart';
+import 'package:style_on_app/exports/pkgs_exports.dart';
 
 import 'package:style_on_app/exports/ui_exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
 import 'package:style_on_app/ui/address/address_screen.dart';
 import 'package:style_on_app/ui/base_widgets/default_appbar.dart';
 import 'package:style_on_app/utils/extensions/ext.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart'
+    as mask;
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
@@ -14,11 +21,15 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  final _formKey = GlobalKey<FormState>();
   late TextEditingController _ccController,
       _expiryController,
       _cvvController,
       _cardHolderController;
-  bool _isCardFlipped = false;
+
+  var _defaultInputFormats = [
+    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+  ];
 
   @override
   void initState() {
@@ -27,6 +38,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     _expiryController = TextEditingController();
     _cvvController = TextEditingController();
     _cardHolderController = TextEditingController();
+    Future.microtask(() => context.read(cardNumberService).updateCardNo(''));
   }
 
   @override
@@ -39,7 +51,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   _onCardNumerInput(String? value) {
-    setState(() {});
+    if (!value!.contains(RegExp(r'[A-za-z]')))
+      context.read(cardNumberService).updateCardNo(value.trim());
+  }
+
+  _onCardHolderInput(String? value) {
+    context.read(cardNumberService).updateCardHolder(value ?? '');
+  }
+
+  _onCardExpiryInput(String? value) {}
+
+  _onCardCvvInput(String? value) {
+    context.read(cardNumberService).updateCardCvv(value ?? '');
   }
 
   @override
@@ -54,48 +77,44 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 context.heightFactor() - (context.safeArea + kToolbarHeight),
             child: Column(
               children: [
-                CreditCardWidget(
-                  onCreditCardWidgetChange: (brand) {},
-                  cardNumber: _ccController.text,
-                  expiryDate: _expiryController.text,
-                  cardHolderName: _cardHolderController.text,
-                  cvvCode: '123', //_cvvController.text,
-                  showBackView: false,
-                  width: context.heightFactor(.5),
-                  textStyle: const TextStyle(
-                      fontSize: kfontSmallest,
-                      color: kWhiteColor,
-                      fontFamily: 'halter',
-                      package: 'flutter_credit_card',
-                      fontWeight: FontWeight.w500),
-                  obscureCardCvv: false,
-                  obscureCardNumber: false,
-                  isHolderNameVisible: true,
-                  backgroundImage: ImagePaths.ccBG,
-                  glassmorphismConfig: Glassmorphism(
-                      blurX: 0,
-                      blurY: 0,
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomLeft,
-                        colors: <Color>[
-                          kDarkRed.withOpacity(.9),
-                          kThemeColor,
-                        ],
-                        stops: const <double>[
-                          0.1,
-                          .2,
-                        ],
-                      )),
-                ),
+                Consumer(builder: (context, watch, child) {
+                  return CreditCardWidget(
+                    onCreditCardWidgetChange: (brand) {
+                      debugPrint("Card Change");
+                    },
+                    cardNumber: '', // watch(cardNumberService).cardNumber,
+                    expiryDate: watch(cardNumberService).cardExpiry,
+                    cardHolderName: watch(cardNumberService).cardHolder,
+                    cvvCode:
+                        watch(cardNumberService).cardCVV, //_cvvController.text,
+                    showBackView: false,
+
+                    width: context.heightFactor(.5),
+                    textStyle: const TextStyle(
+                        fontSize: kfontSmallest,
+                        color: kWhiteColor,
+                        shadows: [Shadow(color: kDarkGrey, blurRadius: 1)],
+                        fontFamily: 'halter',
+                        package: 'flutter_credit_card',
+                        fontWeight: FontWeight.w500),
+                    obscureCardCvv: false,
+                    obscureCardNumber: false,
+                    isHolderNameVisible: true,
+                    backgroundImage: ImagePaths.ccBG,
+                  );
+                }),
                 largestVrtSpacer,
                 CustomizedTextFieldWithLabel(
+                  //inputFormatters: [..._defaultInputFormats],
+                  keyboardType: TextInputType.number,
+                  maxLimit: 20,
                   onValueChange: _onCardNumerInput,
                   controller: _ccController,
                   label: AppStrings.creditCardNo,
                   hintText: AppStrings.enterCCno,
                 ),
                 CustomizedTextFieldWithLabel(
+                  onValueChange: _onCardHolderInput,
                   controller: _cardHolderController,
                   label: AppStrings.nameOnCard,
                   hintText: AppStrings.enterCCName,
@@ -104,6 +123,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   children: [
                     Flexible(
                       child: CustomizedTextFieldWithLabel(
+                        maxLimit: 7,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          // FilteringTextInputFormatter.allow(
+                          //     RegExp(r'[0-9]{2}[/]{1}|[0-9]{0,4}'),
+                          //     ),
+                          CardNumberInputFormatter(),
+                        ], //_defaultInputFormats,
+                        onValueChange: _onCardExpiryInput,
                         controller: _expiryController,
                         label: AppStrings.ccExp,
                         hintText: AppStrings.enterExptDate,
@@ -112,6 +140,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     mediumHztSpacer,
                     Flexible(
                       child: CustomizedTextFieldWithLabel(
+                        maxLimit: 4,
+                        inputFormatters: _defaultInputFormats,
+                        keyboardType: TextInputType.number,
+                        onValueChange: _onCardCvvInput,
                         controller: _cvvController,
                         label: AppStrings.cvv,
                         hintText: AppStrings.enterCVV,
@@ -154,6 +186,9 @@ class CustomizedTextFieldWithLabel extends StatelessWidget {
   final TextStyle? labelTextStyle;
   final InputBorder? primaryBorder;
   final String label, hintText;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLimit;
+
   const CustomizedTextFieldWithLabel({
     Key? key,
     required this.controller,
@@ -165,6 +200,8 @@ class CustomizedTextFieldWithLabel extends StatelessWidget {
     this.hintTextStyle,
     this.inputTextStyle,
     this.labelTextStyle,
+    this.inputFormatters,
+    this.maxLimit,
     this.primaryBorder,
   }) : super(key: key);
 
@@ -185,12 +222,16 @@ class CustomizedTextFieldWithLabel extends StatelessWidget {
         children: [
           Text(label, style: labelTextStyle ?? _defaultTextStyle),
           TextFormField(
+            //inputFormatters: inputFormatters,
+            autofillHints: [AutofillHints.creditCardExpirationDate],
             validator: validator,
             controller: controller,
             onChanged: onValueChange,
             style: inputTextStyle ?? _defaultTextStyle,
-            keyboardType: TextInputType.number,
+            keyboardType: keyboardType,
+            maxLength: maxLimit,
             decoration: InputDecoration(
+                counterText: '',
                 isDense: true,
                 enabledBorder: primaryBorder ?? _defaultBorder,
                 focusedBorder: primaryBorder ?? _defaultBorder,
@@ -201,5 +242,24 @@ class CustomizedTextFieldWithLabel extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class CardNumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    var text = newValue.text;
+    log("OldValue $oldValue and NewValue $newValue");
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    // if (text.length == 2) {
+    //   if (oldValue.text) string = text;
+    // }
+
+    return newValue.copyWith(
+        text: text, selection: TextSelection.collapsed(offset: text.length));
   }
 }

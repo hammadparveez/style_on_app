@@ -55,6 +55,7 @@ dependencies:
   matrix4_transform: ^2.0.1
   themed: ^2.3.0
   flutter_credit_card: ^3.0.1
+  mask_text_input_formatter: ^2.0.0
   #Overflow issue in this Package
   awesome_card: ^1.1.5
   #credit_card: ^0.1.8 -- Non Null Saftey
