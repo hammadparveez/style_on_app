@@ -49,7 +49,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
   _onSetData() async {
     var isValid = _formKey.currentState?.validate() ?? false;
-    Navigator.pushReplacementNamed(context, Routes.checkout);
+    Navigator.pushNamed(context, Routes.checkout);
     if (isValid) {
       context.read(addressService).addAddress(
           firstNameController.text,

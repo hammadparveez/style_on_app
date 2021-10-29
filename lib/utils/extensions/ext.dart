@@ -11,4 +11,20 @@ extension Responsiveness on BuildContext {
   double dp([double v = 1]) {
     return v * ((orientation == Orientation.portrait) ? h() / w() : w() / h());
   }
+
+  double heightFactor([double v = 1]) {
+    if (orientation == Orientation.portrait) {
+      return v * h();
+    } else {
+      return v * w();
+    }
+  }
+
+  double widthFactor([double v = 1]) {
+    if (orientation == Orientation.portrait) {
+      return v * w();
+    } else {
+      return v * h();
+    }
+  }
 }

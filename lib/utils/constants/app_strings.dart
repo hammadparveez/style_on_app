@@ -36,7 +36,7 @@ class AppStrings {
   static const enterConfirmPass = "Enter a Confirm Password";
   static const enterCCno = "Enter a Credit Card No";
   static const enterCCName = "Enter a Name on card";
-  static const enterExptDate = "MM/YY";
+  static const enterExptDate = "MM / YY";
   static const enterCVV = "123";
   static const signInwithGoogle = "Sign In with Google";
   static const signInWithEmail = "Sign Up with Email";
@@ -68,4 +68,6 @@ class AppStrings {
   static const nothingToClear = "Nothing to Clear";
   static const buyNow = "Buy Now";
   static const addToWishlist = "Add to Wishlist";
+  static const cod = "Cash On Delivery";
+  static const payNow = "Pay Now";
 }
