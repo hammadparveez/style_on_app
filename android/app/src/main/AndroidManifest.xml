@@ -2,7 +2,7 @@
     package="com.example.style_on_app">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="style_on_app"
+        android:label="StyleO"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

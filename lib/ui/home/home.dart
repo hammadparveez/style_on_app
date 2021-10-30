@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:style_on_app/domain/freezed_collection.dart';
 import 'package:style_on_app/domain/services/riverpod/pods.dart';
 
@@ -6,6 +9,8 @@ import 'package:style_on_app/exports.dart';
 import 'package:style_on_app/exports/utils_export.dart';
 import 'package:style_on_app/ui/base_widgets/custom_drawer.dart';
 import 'package:style_on_app/utils/constants/images_paths.dart';
+
+void x() {}
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,11 +27,18 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    context.read(bagService).fetchAllCart();
+    Future.microtask(() => context.read(bagService).fetchAllCart());
+    OneSignal.shared.setNotificationWillShowInForegroundHandler(
+        (OSNotificationReceivedEvent event) {
+      // Display Notification, send null to not display, send notification to display
+      log("Notification Displayer $event");
+      //event.complete(event.notification);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    x();
     final heightExcludeAppbar = context.h() - kToolbarHeight;
     final slideShows = [
       _buildSlideImage(ImagePaths.p2),
@@ -49,7 +61,26 @@ class _HomeState extends State<Home> {
             backgroundColor: kWhiteColor,
             actions: [
               IconButton(
-                  icon: const Icon(CupertinoIcons.search), onPressed: () {}),
+                  icon: const Icon(CupertinoIcons.search),
+                  onPressed: () async {
+                    var status = await OneSignal().getDeviceState();
+                    var playerId = status!.userId;
+                    //log("UserId ${status!.userId}");
+
+                    await OneSignal.shared.postNotification(
+                        OSCreateNotification(
+                          
+                            playerIds: [playerId!],
+                            content:
+                                "this is a test from OneSignal's Flutter SDK",
+                            heading: "Test Notification",
+                            sendAfter: DateTime.now(),
+                            additionalData: {"cart": "cart"},
+                            buttons: [
+                              OSActionButton(text: "Send", id: "id1"),
+                              OSActionButton(text: "Delete", id: "id2")
+                            ]));
+                  }),
               IconButton(
                   icon: const Icon(CupertinoIcons.bell), onPressed: () {}),
               IconButton(
