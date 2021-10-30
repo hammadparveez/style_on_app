@@ -53,11 +53,12 @@ class _HomeState extends State<Home> {
               IconButton(
                   icon: const Icon(CupertinoIcons.bell), onPressed: () {}),
               IconButton(
-                  icon: const Icon(Icons.logout_rounded),
+                  icon: const Icon(Icons.shopping_bag),
                   onPressed: () async {
-                    await context.read(authenticatePod).signOut();
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil(Routes.auth, (route) => false);
+                    Navigator.pushNamed(context, Routes.cart);
+                    // await context.read(authenticatePod).signOut();
+                    // Navigator.of(context)
+                    //     .pushNamedAndRemoveUntil(Routes.auth, (route) => false);
                   }),
             ],
           ),

@@ -21,48 +21,52 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  final _formKey = GlobalKey<FormState>();
   late TextEditingController _ccController,
       _expiryController,
       _cvvController,
       _cardHolderController;
 
-  var _defaultInputFormats = [
-    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-  ];
-
   @override
   void initState() {
     super.initState();
-    _ccController = TextEditingController();
-    _expiryController = TextEditingController();
-    _cvvController = TextEditingController();
+    _ccController = MaskedTextController(mask: '0000 0000 0000 0000');
+    _expiryController = MaskedTextController(mask: '00/00');
+    _cvvController = MaskedTextController(mask: '0000');
     _cardHolderController = TextEditingController();
+    context.read(cardNumberService).reset();
     Future.microtask(() => context.read(cardNumberService).updateCardNo(''));
   }
 
   @override
+  void didUpdateWidget(covariant PaymentScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    log("Did Update Widget PamentScreen");
+  }
+
+  @override
   void dispose() {
-    super.dispose();
     _ccController.dispose();
     _expiryController.dispose();
     _cvvController.dispose();
     _cardHolderController.dispose();
+    super.dispose();
   }
 
   _onCardNumerInput(String? value) {
-    if (!value!.contains(RegExp(r'[A-za-z]')))
-      context.read(cardNumberService).updateCardNo(value.trim());
+    context.read(cardNumberService).updateCardNo(value!);
+    setState(() {});
   }
 
   _onCardHolderInput(String? value) {
-    context.read(cardNumberService).updateCardHolder(value ?? '');
+    context.read(cardNumberService).updateCardHolder(value!);
   }
 
-  _onCardExpiryInput(String? value) {}
+  _onCardExpiryInput(String? value) {
+    context.read(cardNumberService).updateCardExpiry(value!);
+  }
 
   _onCardCvvInput(String? value) {
-    context.read(cardNumberService).updateCardCvv(value ?? '');
+    context.read(cardNumberService).updateCardCvv(value!);
   }
 
   @override
@@ -82,13 +86,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     onCreditCardWidgetChange: (brand) {
                       debugPrint("Card Change");
                     },
-                    cardNumber: '', // watch(cardNumberService).cardNumber,
+                    cardNumber: watch(cardNumberService).cardNumber,
                     expiryDate: watch(cardNumberService).cardExpiry,
                     cardHolderName: watch(cardNumberService).cardHolder,
-                    cvvCode:
-                        watch(cardNumberService).cardCVV, //_cvvController.text,
+                    cvvCode: watch(cardNumberService).cardCVV,
                     showBackView: false,
-
                     width: context.heightFactor(.5),
                     textStyle: const TextStyle(
                         fontSize: kfontSmallest,
@@ -105,9 +107,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 }),
                 largestVrtSpacer,
                 CustomizedTextFieldWithLabel(
-                  //inputFormatters: [..._defaultInputFormats],
                   keyboardType: TextInputType.number,
-                  maxLimit: 20,
                   onValueChange: _onCardNumerInput,
                   controller: _ccController,
                   label: AppStrings.creditCardNo,
@@ -123,14 +123,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   children: [
                     Flexible(
                       child: CustomizedTextFieldWithLabel(
-                        maxLimit: 7,
                         keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          // FilteringTextInputFormatter.allow(
-                          //     RegExp(r'[0-9]{2}[/]{1}|[0-9]{0,4}'),
-                          //     ),
-                          CardNumberInputFormatter(),
-                        ], //_defaultInputFormats,
                         onValueChange: _onCardExpiryInput,
                         controller: _expiryController,
                         label: AppStrings.ccExp,
@@ -140,8 +133,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     mediumHztSpacer,
                     Flexible(
                       child: CustomizedTextFieldWithLabel(
-                        maxLimit: 4,
-                        inputFormatters: _defaultInputFormats,
                         keyboardType: TextInputType.number,
                         onValueChange: _onCardCvvInput,
                         controller: _cvvController,
@@ -159,11 +150,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       CustomElevatedButton(
                           onTap: () {},
                           buttonColor: kThemeColor,
-                          text: Text(AppStrings.cod)),
+                          text: const Text(AppStrings.cod)),
                       CustomElevatedButton(
                           onTap: () {},
                           buttonColor: kThemeColor,
-                          text: Text(AppStrings.payNow)),
+                          text: const Text(AppStrings.payNow)),
                     ],
                   ),
                 ),

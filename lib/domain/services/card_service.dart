@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:style_on_app/exports/ui_exports.dart';
 
 enum CardServiceFieldType {
@@ -28,10 +30,12 @@ class CardService extends ChangeNotifier {
 
   updateCardHolder(String name) {
     _cardHolder = name;
+    notifyListeners();
   }
 
   updateCardExpiry(String expiry) {
     _cardExpiry = expiry;
+    notifyListeners();
   }
 
   updateCardCvv(String cvv) {
@@ -43,4 +47,15 @@ class CardService extends ChangeNotifier {
     _isCardFlipped = !_isCardFlipped;
     notifyListeners();
   }
+
+  reset() {
+    _cardNumber = _cardHolder = _cardExpiry = _cardCVV = '';
+  }
+
+  @override
+  void dispose() {
+    log("DisPose Service");
+    super.dispose();
+  }
 }
+
